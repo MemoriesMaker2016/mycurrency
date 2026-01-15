@@ -195,6 +195,18 @@ export function Header() {
               >
                 Live Rates
               </Link>
+              <Link
+                href="/about"
+                className="px-4 py-2 hover:bg-secondary rounded-md"
+              >
+                About Us
+              </Link>
+              <Link
+                href="/contact"
+                className="px-4 py-2 hover:bg-secondary rounded-md"
+              >
+                Contact
+              </Link>
               <div className="flex gap-2 px-4 pt-2">
                 <Button
                   variant="outline"
@@ -207,7 +219,7 @@ export function Header() {
                   size="sm"
                   className="flex-1 bg-accent text-accent-foreground"
                 >
-                  Book Order
+                  Sign Up
                 </Button>
               </div>
             </nav>
