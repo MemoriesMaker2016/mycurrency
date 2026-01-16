@@ -208,19 +208,23 @@ export function Header() {
                 Contact
               </Link>
               <div className="flex gap-2 px-4 pt-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="flex-1 bg-transparent"
-                >
-                  Login
-                </Button>
-                <Button
-                  size="sm"
-                  className="flex-1 bg-accent text-accent-foreground"
-                >
-                  Sign Up
-                </Button>
+                <Link href="/login">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="flex-1 bg-transparent"
+                  >
+                    Login
+                  </Button>
+                </Link>
+                <Link href="/register">
+                  <Button
+                    size="sm"
+                    className="flex-1 bg-accent text-accent-foreground"
+                  >
+                    Sign Up
+                  </Button>
+                </Link>
               </div>
             </nav>
           </div>
