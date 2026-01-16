@@ -2,7 +2,7 @@ import { ExchangeCalculator } from './exchange-calculator';
 import { Shield, Clock, Star, Users } from 'lucide-react';
 
 const stats = [
-  { icon: Users, value: '5L+', label: 'Happy Customers' },
+  { icon: Users, value: '10K+', label: 'Happy Customers' },
   { icon: Star, value: '4.8', label: 'Rating' },
   { icon: Shield, value: '100%', label: 'Secure' },
   { icon: Clock, value: '24/7', label: 'Support' },

@@ -108,10 +108,14 @@ export default function LoginPage() {
             href="/"
             className="lg:hidden flex items-center gap-2 mb-8 justify-center"
           >
-            <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
-              <TrendingUp className="h-6 w-6 text-primary-foreground" />
-            </div>
-            <span className="text-xl font-bold text-foreground">ForexHub</span>
+            <Image
+              src="/mycurrency-logo_1.png"
+              alt="MyCurrency Logo"
+              width={270}
+              height={100}
+              className="object-contain"
+              priority
+            />
           </Link>
 
           <Card className="border-0 shadow-2xl shadow-primary/5">
