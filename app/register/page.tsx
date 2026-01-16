@@ -1,6 +1,8 @@
 'use client';
 
 import type React from 'react';
+import { MapPin, Building } from 'lucide-react';
+import { indianStates, stateList } from '@/lib/india-cities';
 
 import { useState } from 'react';
 import Link from 'next/link';
@@ -47,6 +49,9 @@ export default function RegisterPage() {
     password: '',
     confirmPassword: '',
     country: '',
+    state: '',
+    city: '',
+    address: '',
     agreeTerms: false,
     agreeMarketing: false,
   });
@@ -76,13 +81,21 @@ export default function RegisterPage() {
     'bg-green-600',
   ];
 
+  // Get available cities for selected state
+  const availableCities = formData.state
+    ? indianStates[formData.state] || []
+    : [];
+
   return (
     <div className="min-h-screen flex">
       {/* Left Section - Form */}
       <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-background overflow-y-auto">
         <div className="w-full max-w-lg py-8">
           {/* Mobile Logo */}
-          <Link href="/" className="flex items-center gap-3">
+          <Link
+            href="/"
+            className="lg:hidden flex items-center gap-2 mb-8 justify-center"
+          >
             <Image
               src="/mycurrency-logo_1.png"
               alt="MyCurrency Logo"
@@ -214,6 +227,88 @@ export default function RegisterPage() {
                     </Select>
                   </div>
                 </div>
+
+                {/* State Field */}
+                {formData.country === 'in' && (
+                  <>
+                    <div className="space-y-2">
+                      <Label htmlFor="state" className="text-sm font-medium">
+                        State
+                      </Label>
+                      <div className="relative">
+                        <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground z-10" />
+                        <Select
+                          value={formData.state}
+                          onValueChange={(value) =>
+                            setFormData({ ...formData, state: value, city: '' })
+                          }
+                        >
+                          <SelectTrigger className="pl-10 h-11">
+                            <SelectValue placeholder="Select your state" />
+                          </SelectTrigger>
+                          <SelectContent className="max-h-64">
+                            {stateList.map((state) => (
+                              <SelectItem key={state.value} value={state.value}>
+                                {state.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+
+                    {/* City Field */}
+                    <div className="space-y-2">
+                      <Label htmlFor="city" className="text-sm font-medium">
+                        City
+                      </Label>
+                      <div className="relative">
+                        <Building className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground z-10" />
+                        <Select
+                          value={formData.city}
+                          onValueChange={(value) =>
+                            setFormData({ ...formData, city: value })
+                          }
+                          disabled={!formData.state}
+                        >
+                          <SelectTrigger className="pl-10 h-11 disabled:opacity-50 disabled:cursor-not-allowed">
+                            <SelectValue placeholder="Select your city" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {availableCities.map((city) => (
+                              <SelectItem key={city} value={city}>
+                                {city}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+
+                    {/* Address Field */}
+                    <div className="space-y-2">
+                      <Label htmlFor="address" className="text-sm font-medium">
+                        Address
+                      </Label>
+                      <div className="relative">
+                        <Building className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                        <textarea
+                          id="address"
+                          placeholder="Enter your complete address"
+                          value={formData.address}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              address: e.target.value,
+                            })
+                          }
+                          className="pl-10 pt-3 p-3 min-h-24 w-full rounded-lg border border-input bg-background text-foreground transition-all duration-200 focus:ring-2 focus:ring-primary/20 focus:border-transparent resize-none"
+                          required
+                        />
+                      </div>
+                    </div>
+                  </>
+                )}
 
                 {/* Password Field */}
                 <div className="space-y-2">
@@ -385,7 +480,7 @@ export default function RegisterPage() {
                 </Button>
 
                 {/* Divider */}
-                <div className="relative my-4">
+                {/* <div className="relative my-4">
                   <div className="absolute inset-0 flex items-center">
                     <div className="w-full border-t border-border" />
                   </div>
@@ -394,10 +489,10 @@ export default function RegisterPage() {
                       Or sign up with
                     </span>
                   </div>
-                </div>
+                </div> */}
 
                 {/* Social Signup */}
-                <div className="grid grid-cols-2 gap-3">
+                {/* <div className="grid grid-cols-2 gap-3">
                   <Button
                     type="button"
                     variant="outline"
@@ -437,7 +532,7 @@ export default function RegisterPage() {
                     </svg>
                     Apple
                   </Button>
-                </div>
+                </div> */}
 
                 {/* Sign In Link */}
                 <p className="text-center text-sm text-muted-foreground pt-4">
@@ -466,7 +561,7 @@ export default function RegisterPage() {
 
         <div className="relative z-10 flex flex-col justify-center px-16 text-primary-foreground">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-3">
+          <Link href="/" className="flex items-center gap-3 mb-12">
             <Image
               src="/mycurrency-logo-white.png"
               alt="MyCurrency Logo"
@@ -508,7 +603,7 @@ export default function RegisterPage() {
           {/* Stats */}
           <div className="flex gap-8 mt-12 pt-8 border-t border-primary-foreground/20">
             <div>
-              <div className="text-3xl font-bold">5L+</div>
+              <div className="text-3xl font-bold">10K+</div>
               <div className="text-sm text-primary-foreground/70">
                 Happy Customers
               </div>

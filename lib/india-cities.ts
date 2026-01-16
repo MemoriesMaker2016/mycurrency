@@ -1,0 +1,72 @@
+export const indianStates: Record<string, string[]> = {
+  'andhra-pradesh': [
+    'Visakhapatnam',
+    'Vijayawada',
+    'Guntur',
+    'Nellore',
+    'Rajahmundry',
+  ],
+  'arunachal-pradesh': [
+    'Itanagar',
+    'Naharlagun',
+    'Papum Pare',
+    'Changlang',
+    'Lohit',
+  ],
+  assam: ['Guwahati', 'Silchar', 'Dibrugarh', 'Nagaon', 'Barpeta'],
+  bihar: ['Patna', 'Gaya', 'Bhagalpur', 'Muzaffarpur', 'Darbhanga'],
+  chhattisgarh: ['Raipur', 'Bhilai', 'Durg', 'Rajnandgaon', 'Bilaspur'],
+  goa: ['Panaji', 'Margao', 'Mapusa', 'Vasco da Gama', 'Sanquelim'],
+  gujarat: ['Ahmedabad', 'Surat', 'Vadodara', 'Rajkot', 'Gandhinagar'],
+  haryana: ['Faridabad', 'Gurgaon', 'Hisar', 'Rohtak', 'Panipat', 'Sonipat'],
+  'himachal-pradesh': ['Shimla', 'Solan', 'Mandi', 'Kangra', 'Kullu'],
+  jharkhand: ['Ranchi', 'Dhanbad', 'Giridih', 'Jamshedpur', 'Hazaribag'],
+  karnataka: ['Bangalore', 'Mysore', 'Mangalore', 'Belgaum', 'Hubballi'],
+  kerala: [
+    'Kochi',
+    'Thiruvananthapuram',
+    'Kozhikode',
+    'Thrissur',
+    'Pathanamthitta',
+  ],
+  'madhya-pradesh': ['Indore', 'Bhopal', 'Jabalpur', 'Gwalior', 'Ujjain'],
+  maharashtra: ['Mumbai', 'Pune', 'Nagpur', 'Thane', 'Aurangabad'],
+  manipur: ['Imphal', 'Bishnupur', 'Thoubal', 'Churachandpur', 'Ukhrul'],
+  meghalaya: ['Shillong', 'Tura', 'Jowai', 'Nongstoin', 'Baghmara'],
+  mizoram: ['Aizawl', 'Lunglei', 'Saiha', 'Kolasib', 'Champhai'],
+  nagaland: ['Kohima', 'Dimapur', 'Mokokchung', 'Tuensang', 'Mon'],
+  odisha: ['Bhubaneswar', 'Cuttack', 'Rourkela', 'Berhampur', 'Sambalpur'],
+  punjab: ['Ludhiana', 'Amritsar', 'Jalandhar', 'Patiala', 'Bathinda'],
+  rajasthan: ['Jaipur', 'Jodhpur', 'Kota', 'Ajmer', 'Udaipur'],
+  sikkim: ['Gangtok', 'Namchi', 'Gyalshing', 'Mangan', 'Naya Bazaar'],
+  'tamil-nadu': ['Chennai', 'Coimbatore', 'Madurai', 'Salem', 'Tiruppur'],
+  telangana: ['Hyderabad', 'Warangal', 'Nizamabad', 'Khammam', 'Karimnagar'],
+  tripura: ['Agartala', 'Udaipur', 'Dharmanagar', 'Komilla', 'Suryamaninagar'],
+  'uttar-pradesh': ['Lucknow', 'Kanpur', 'Agra', 'Varanasi', 'Meerut'],
+  uttarakhand: [
+    'Dehradun',
+    'Haridwar',
+    'Nainital',
+    'Almora',
+    'Udham Singh Nagar',
+  ],
+  'west-bengal': ['Kolkata', 'Asansol', 'Siliguri', 'Durgapur', 'Malda'],
+  delhi: [
+    'New Delhi',
+    'Central Delhi',
+    'East Delhi',
+    'West Delhi',
+    'North Delhi',
+  ],
+  chandigarh: ['Chandigarh'],
+  puducherry: ['Puducherry', 'Yanam', 'Karikal', 'Mahe'],
+  ladakh: ['Leh', 'Kargil'],
+};
+
+export const stateList = Object.keys(indianStates).map((key) => ({
+  value: key,
+  label: key
+    .split('-')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' '),
+}));

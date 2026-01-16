@@ -118,7 +118,7 @@ export default function LoginPage() {
             />
           </Link>
 
-          <Card className="border-0 shadow-2xl shadow-primary/5">
+          <Card className="border-0 shadow-2xl shadow-lg">
             <CardHeader className="space-y-1 pb-6">
               <CardTitle className="text-2xl font-bold text-center">
                 Sign In
@@ -213,7 +213,7 @@ export default function LoginPage() {
                 </Button>
 
                 {/* Divider */}
-                <div className="relative my-6">
+                {/* <div className="relative my-6">
                   <div className="absolute inset-0 flex items-center">
                     <div className="w-full border-t border-border" />
                   </div>
@@ -222,10 +222,10 @@ export default function LoginPage() {
                       Or continue with
                     </span>
                   </div>
-                </div>
+                </div> */}
 
                 {/* Social Logins */}
-                <div className="grid grid-cols-2 gap-3">
+                {/* <div className="grid grid-cols-2 gap-3">
                   <Button
                     type="button"
                     variant="outline"
@@ -265,7 +265,7 @@ export default function LoginPage() {
                     </svg>
                     Apple
                   </Button>
-                </div>
+                </div> */}
 
                 {/* Sign Up Link */}
                 <p className="text-center text-sm text-muted-foreground pt-4">
