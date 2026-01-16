@@ -106,7 +106,7 @@ export default function RegisterPage() {
             />
           </Link>
 
-          <Card className="border-0 shadow-2xl shadow-primary/5">
+          <Card className="border-0 shadow-2xl shadow-lg">
             <CardHeader className="space-y-1 pb-4">
               <CardTitle className="text-2xl font-bold text-center">
                 Create Account
@@ -188,7 +188,7 @@ export default function RegisterPage() {
                     <Input
                       id="phone"
                       type="tel"
-                      placeholder="+91 98765 43210"
+                      placeholder="+00 00000 00000"
                       value={formData.phone}
                       onChange={(e) =>
                         setFormData({ ...formData, phone: e.target.value })
@@ -561,7 +561,7 @@ export default function RegisterPage() {
 
         <div className="relative z-10 flex flex-col justify-center px-16 text-primary-foreground">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-3 mb-12">
+          <Link href="/" className="flex items-center gap-3">
             <Image
               src="/mycurrency-logo-white.png"
               alt="MyCurrency Logo"
