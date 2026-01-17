@@ -56,9 +56,54 @@ export default function RegisterPage() {
     agreeMarketing: false,
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle registration logic
+
+    // Check if passwords match
+    if (formData.password !== formData.confirmPassword) {
+      alert('Passwords do not match');
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        'https://serverofmycurrancywebsite-2.onrender.com/api/auth/register',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            firstName: formData.firstName,
+            lastName: formData.lastName,
+            email: formData.email,
+            phone: formData.phone,
+            password: formData.password,
+            country: formData.country,
+            state: formData.state,
+            city: formData.city,
+            address: formData.address,
+            agreeTerms: formData.agreeTerms,
+            agreeMarketing: formData.agreeMarketing,
+          }),
+        },
+      );
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert('Account created successfully!');
+        console.log('User registered:', data);
+        // Optionally, redirect to login page
+        // router.push('/login');
+      } else {
+        alert(data.message || 'Registration failed');
+        console.error('Error:', data);
+      }
+    } catch (error) {
+      console.error('Network error:', error);
+      alert('Something went wrong. Please try again later.');
+    }
   };
 
   const passwordStrength = (password: string) => {
