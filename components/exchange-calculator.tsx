@@ -104,21 +104,16 @@ export function ExchangeCalculator({
       <CardContent className="p-0">
         <Tabs
           value={activeTab}
-          onValueChange={(v) => setActiveTab(v as 'buy' | 'sell')}
+          onValueChange={(v) => setActiveTab(v as 'buy')}
           className="w-full"
         >
-          <TabsList className="w-full grid grid-cols-2 rounded-none rounded-t-lg h-14 bg-secondary">
+          <TabsList className="w-full rounded-none rounded-t-lg h-14 bg-secondary">
             <TabsTrigger
-              value="buy"
-              className="text-base font-semibold data-[state=active]:bg-card data-[state=active]:text-primary rounded-none rounded-tl-lg h-full"
+              value=""
+              className="text-base font-semibold  bg-white
+               rounded-none rounded-tl-lg h-full"
             >
               Buy Forex
-            </TabsTrigger>
-            <TabsTrigger
-              value="sell"
-              className="text-base font-semibold data-[state=active]:bg-card data-[state=active]:text-primary rounded-none rounded-tr-lg h-full"
-            >
-              Sell Forex
             </TabsTrigger>
           </TabsList>
 
