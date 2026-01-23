@@ -33,7 +33,9 @@ import {
   CreditCard,
   ArrowRight,
 } from 'lucide-react';
-
+import { useAuthStore } from '@/zustandStore/login';
+import { useRouter } from 'next/navigation';
+import urlOfBakEnd from '../restData';
 interface ExchangeCalculatorProps {
   defaultTab?: 'buy' | 'sell';
 }
@@ -42,7 +44,8 @@ export function ExchangeCalculator({
   defaultTab = 'buy',
 }: ExchangeCalculatorProps) {
   const [activeTab, setActiveTab] = useState<'buy' | 'sell'>(defaultTab);
-
+  const router = useRouter();
+  const { token, isAuthenticated } = useAuthStore();
   const [fromCurrency, setFromCurrency] = useState('INR');
   const [toCurrency, setToCurrency] = useState('USD');
   const [amount, setAmount] = useState<string>('10000');
@@ -78,6 +81,47 @@ export function ExchangeCalculator({
     const temp = fromCurrency;
     setFromCurrency(toCurrency);
     setToCurrency(temp);
+  };
+
+  const handleBookOrder = async () => {
+    if (!isAuthenticated || !token) {
+      router.push('/login');
+      return;
+    }
+
+    try {
+      const payload = {
+        orderType: 'buy', // buy | sell
+        product, // notes | card
+        fromCurrency: activeTab === 'buy' ? 'INR' : fromCurrency,
+        toCurrency: activeTab === 'buy' ? toCurrency : 'INR',
+        inputAmount: Number(amount),
+        convertedAmount,
+        rate,
+      };
+
+      const res = await fetch(`${urlOfBakEnd}/api/auth/create`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        alert(data.message || 'Order failed');
+        return;
+      }
+
+      // ✅ success
+      setOpen(true);
+    } catch (error) {
+      console.error(error);
+      alert('Something went wrong while booking order');
+    }
   };
 
   return (
@@ -293,7 +337,7 @@ export function ExchangeCalculator({
 
             {/* CTA Button */}
             <Button
-              onClick={() => setOpen(true)}
+              onClick={handleBookOrder}
               className="w-full h-12 text-lg font-semibold bg-accent text-accent-foreground hover:bg-accent/90 gap-2"
             >
               Book This Order

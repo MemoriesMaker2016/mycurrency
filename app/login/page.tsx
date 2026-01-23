@@ -16,7 +16,6 @@ import {
 } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
-  TrendingUp,
   Eye,
   EyeOff,
   Mail,
@@ -25,17 +24,44 @@ import {
   Shield,
   Smartphone,
 } from 'lucide-react';
+import urlOfBakEnd from '../../restData';
 import Image from 'next/image';
+import { useAuthStore } from '@/zustandStore/login';
+import { useRouter } from 'next/navigation'; // ✅ CORRECT
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const router = useRouter();
+  const login = useAuthStore((s) => s.login);
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle login logic
+
+    try {
+      const res = await fetch(`${urlOfBakEnd}/api/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        alert(data.message || 'Login failed');
+        return;
+      }
+
+      // ✅ SAVE TO ZUSTAND
+      login(data.token, data.user, rememberMe);
+
+      // ✅ GO TO HOME PAGE
+      router.push('/');
+    } catch (error) {
+      console.error(error);
+      alert('Something went wrong');
+    }
   };
 
   return (

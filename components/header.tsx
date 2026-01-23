@@ -19,10 +19,12 @@ import {
   Send,
 } from 'lucide-react';
 import Image from 'next/image';
+import { useAuthStore } from '@/zustandStore/login';
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
+  const user = useAuthStore((s) => s.user);
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   return (
     <header className="sticky top-0 z-50 w-full bg-card border-b border-border shadow-lg">
       {/* Top Bar */}
@@ -136,21 +138,27 @@ export function Header() {
           </nav>
 
           {/* CTA Buttons */}
-          <div className="hidden lg:flex items-center gap-3">
-            <Link href="/login">
-              <Button variant="outline" size="sm">
-                Login
-              </Button>
-            </Link>
-            <Link href="/register">
-              <Button
-                size="sm"
-                className="bg-accent text-accent-foreground hover:bg-accent/90"
-              >
-                Sign Up
-              </Button>
-            </Link>
-          </div>
+          {isAuthenticated && user ? (
+            <div className=" lg:flex items-end justify-end gap-3">
+              <p>{user.firstName} </p>
+            </div>
+          ) : (
+            <div className="hidden lg:flex items-center gap-3">
+              <Link href="/login">
+                <Button variant="outline" size="sm">
+                  Login
+                </Button>
+              </Link>
+              <Link href="/register">
+                <Button
+                  size="sm"
+                  className="bg-accent text-accent-foreground hover:bg-accent/90"
+                >
+                  Sign Up
+                </Button>
+              </Link>
+            </div>
+          )}
 
           {/* Mobile Menu Button */}
           <Button
@@ -207,25 +215,29 @@ export function Header() {
               >
                 Contact
               </Link>
-              <div className="flex gap-2 px-4 pt-2">
-                <Link href="/login">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="flex-1 bg-transparent"
-                  >
-                    Login
-                  </Button>
-                </Link>
-                <Link href="/register">
-                  <Button
-                    size="sm"
-                    className="flex-1 bg-accent text-accent-foreground"
-                  >
-                    Sign Up
-                  </Button>
-                </Link>
-              </div>
+              {isAuthenticated && user ? (
+                <></>
+              ) : (
+                <div className="flex gap-2 px-4 pt-2">
+                  <Link href="/login">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="flex-1 bg-transparent"
+                    >
+                      Login
+                    </Button>
+                  </Link>
+                  <Link href="/register">
+                    <Button
+                      size="sm"
+                      className="flex-1 bg-accent text-accent-foreground"
+                    >
+                      Sign Up
+                    </Button>
+                  </Link>
+                </div>
+              )}
             </nav>
           </div>
         )}
