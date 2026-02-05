@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -20,11 +20,27 @@ import {
 } from 'lucide-react';
 import Image from 'next/image';
 import { useAuthStore } from '@/zustandStore/login';
+import ProfileMenu from '@/app/profiledropdown/page';
+import { User } from 'lucide-react';
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const user = useAuthStore((s) => s.user);
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, []);
+
   return (
     <header className="sticky top-0 z-50 w-full bg-card border-b border-border shadow-lg">
       {/* Top Bar */}
@@ -78,7 +94,7 @@ export function Header() {
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="ghost"
-                  className="flex items-center gap-1 text-sm"
+                  className="flex items-center gap-1 text-sm cursor-pointer"
                 >
                   Exchange Currency
                   <ChevronDown className="h-4 w-4" />
@@ -86,7 +102,10 @@ export function Header() {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="start" className="w-48">
                 <DropdownMenuItem asChild>
-                  <Link href="/exchange" className="flex items-center gap-2">
+                  <Link
+                    href="/exchange"
+                    className="flex items-center gap-2 cursor-pointer"
+                  >
                     <CreditCard className="h-4 w-4" />
                     Buy Foreign Currency
                   </Link>
@@ -94,7 +113,7 @@ export function Header() {
                 <DropdownMenuItem asChild>
                   <Link
                     href="/exchange?type=sell"
-                    className="flex items-center gap-2"
+                    className="flex items-center gap-2 cursor-pointer"
                   >
                     <CreditCard className="h-4 w-4" />
                     Sell Foreign Currency
@@ -104,7 +123,10 @@ export function Header() {
             </DropdownMenu>
 
             <Link href="/transfer">
-              <Button variant="ghost" className="flex items-center gap-1">
+              <Button
+                variant="ghost"
+                className="flex items-center gap-1 cursor-pointer"
+              >
                 <Send className="h-4 w-4" />
                 Money Transfer
               </Button>
@@ -126,39 +148,78 @@ export function Header() {
             </DropdownMenu> */}
 
             <Link href="/rates">
-              <Button variant="ghost">Live Rates</Button>
+              <Button variant="ghost" className="cursor-pointer">
+                Live Rates
+              </Button>
             </Link>
             <Link href="/about">
-              <Button variant="ghost">About Us</Button>
+              <Button variant="ghost" className="cursor-pointer">
+                About Us
+              </Button>
             </Link>
 
             <Link href="/contact">
-              <Button variant="ghost">Contact</Button>
+              <Button variant="ghost" className="cursor-pointer">
+                Contact
+              </Button>
             </Link>
           </nav>
 
           {/* CTA Buttons */}
           {isAuthenticated && user ? (
-            <div className=" lg:flex items-end justify-end gap-3">
-              <p>{user.firstName} </p>
+            <div className="hidden lg:flex items-center justify-end">
+              dahskjdhashkjh
             </div>
           ) : (
             <div className="hidden lg:flex items-center gap-3">
               <Link href="/login">
-                <Button variant="outline" size="sm">
+                <Button variant="outline" size="sm" className="cursor-pointer">
                   Login
                 </Button>
               </Link>
               <Link href="/register">
                 <Button
                   size="sm"
-                  className="bg-accent text-accent-foreground hover:bg-accent/90"
+                  className="bg-accent text-accent-foreground hover:bg-accent/90 cursor-pointer"
                 >
                   Sign Up
                 </Button>
               </Link>
             </div>
           )}
+          <div ref={ref} className="relative">
+            {/* Profile button */}
+            <button
+              onClick={() => setOpen((prev) => !prev)}
+              className="flex items-center gap-2 font-medium"
+            >
+              <div className="w-8 h-8 rounded-full bg-accent text-white flex items-center justify-center">
+                <User size={16} />
+              </div>
+              <span className="hidden lg:block">Siddhanth</span>
+            </button>
+
+            {/* Dropdown */}
+            {open && (
+              <div className="absolute right-0 mt-2 w-40 bg-white border shadow-lg rounded-md z-50">
+                <Link
+                  href="/profile"
+                  className="block px-4 py-2 hover:bg-gray-100"
+                  onClick={() => setOpen(false)}
+                >
+                  My Profile
+                </Link>
+
+                {/* Logout button (NO behavior yet) */}
+                <button
+                  type="button"
+                  className="w-full text-left px-4 py-2 hover:bg-gray-100 text-red-600"
+                >
+                  Logout
+                </button>
+              </div>
+            )}
+          </div>
 
           {/* Mobile Menu Button */}
           <Button

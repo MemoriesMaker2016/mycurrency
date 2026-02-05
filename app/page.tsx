@@ -3,9 +3,10 @@ import { Footer } from '@/components/footer';
 import { RateTicker } from '@/components/rate-ticker';
 import { HeroSection } from '@/components/hero-section';
 import { ServicesSection } from '@/components/services-section';
-import { TestimonialsSection } from '@/components/testimonials-section';
+import { TestimonialSection } from '@/components/testimonials-section';
 import { CTASection } from '@/components/cta-section';
 import { AuthProvider } from '@/components/AuthProvider';
+import { ForexCardSection } from '@/components/forexCardSection';
 
 export default function HomePage() {
   return (
@@ -16,7 +17,8 @@ export default function HomePage() {
         <main className="flex-1">
           <HeroSection />
           <ServicesSection />
-          <TestimonialsSection />
+          <ForexCardSection />
+          <TestimonialSection />
           <CTASection />
         </main>
         <Footer />

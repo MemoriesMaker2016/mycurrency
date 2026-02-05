@@ -10,14 +10,16 @@ const stats = [
 
 export function HeroSection() {
   return (
-    <section className="relative bg-gradient-to-br from-primary/5 via-background to-accent/5 py-12 md:py-20">
+    <section className="relative bg-linear-to-br from-primary/5 via-background to-accent/5 py-12 md:py-20 pb-24">
       <div className="container mx-auto px-4">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
+        <div className="grid lg:grid-cols-2 gap-12 items-start">
           {/* Left Content */}
           <div className="space-y-8">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-accent/20 rounded-full text-sm font-medium text-accent-foreground">
-              <span className="w-2 h-2 bg-success rounded-full animate-pulse" />
-              Up to 2% Cashback on All Orders
+            <div className="inline-flex items-center gap-2 mb-6 bg-white rounded-full px-4 py-2 shadow-sm">
+              <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+              <span className="text-xs font-bold tracking-widest text-gray-800">
+                UP TO 2% CASHBACK ON ALL ORDERS
+              </span>
             </div>
 
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-tight text-balance">

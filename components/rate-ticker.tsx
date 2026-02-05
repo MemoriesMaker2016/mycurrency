@@ -15,7 +15,11 @@ export function RateTicker() {
             key={`${currency.code}-${index}`}
             className="inline-flex items-center gap-3 px-6"
           >
-            <span className="text-lg">{currency.flag}</span>
+            <img
+              src={`/flags/${currency.country}.svg`}
+              alt={currency.code}
+              className="h-4 w-6 object-cover"
+            />
             <span className="font-medium text-foreground">{currency.code}</span>
             <span className="text-sm text-muted-foreground">Buy:</span>
             <span className="font-semibold text-foreground">

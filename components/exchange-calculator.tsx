@@ -35,7 +35,6 @@ import {
 } from 'lucide-react';
 import { useAuthStore } from '@/zustandStore/login';
 import { useRouter } from 'next/navigation';
-import urlOfBakEnd from '../restData';
 interface ExchangeCalculatorProps {
   defaultTab?: 'buy' | 'sell';
 }
@@ -53,7 +52,7 @@ export function ExchangeCalculator({
   const [rate, setRate] = useState<number>(0);
   const [product, setProduct] = useState<'notes' | 'card'>('notes');
   const [open, setOpen] = useState(false);
-
+  const urlOfBackEnd = process.env.NEXT_PUBLIC_BACKEND_URL;
   useEffect(() => {
     const run = async () => {
       const target = activeTab === 'buy' ? toCurrency : fromCurrency;
@@ -100,7 +99,7 @@ export function ExchangeCalculator({
         rate,
       };
 
-      const res = await fetch(`${urlOfBakEnd}/api/auth/create`, {
+      const res = await fetch(`${urlOfBackEnd}/api/auth/create`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -151,13 +150,18 @@ export function ExchangeCalculator({
           onValueChange={(v) => setActiveTab(v as 'buy')}
           className="w-full"
         >
-          <TabsList className="w-full rounded-none rounded-t-lg h-14 bg-secondary">
+          <TabsList className="w-full grid grid-cols-2 rounded-none rounded-t-lg h-14 bg-secondary">
             <TabsTrigger
-              value=""
-              className="text-base font-semibold  bg-white
-               rounded-none rounded-tl-lg h-full"
+              value="buy"
+              className="text-base font-semibold data-[state=active]:bg-card data-[state=active]:text-primary rounded-none rounded-tl-lg h-full cursor-pointer"
             >
               Buy Forex
+            </TabsTrigger>
+            <TabsTrigger
+              value="sell"
+              className="text-base font-semibold data-[state=active]:bg-card data-[state=active]:text-primary rounded-none rounded-tr-lg h-full cursor-pointer"
+            >
+              Sell Forex
             </TabsTrigger>
           </TabsList>
 
@@ -241,7 +245,7 @@ export function ExchangeCalculator({
                       {currencies.map((currency) => (
                         <SelectItem key={currency.code} value={currency.code}>
                           <span className="flex items-center gap-2">
-                            <span>{currency.flag}</span>
+                            <span>{currency.country}</span>
                             <span>{currency.code}</span>
                           </span>
                         </SelectItem>
@@ -277,7 +281,7 @@ export function ExchangeCalculator({
                       {currencies.map((currency) => (
                         <SelectItem key={currency.code} value={currency.code}>
                           <span className="flex items-center gap-2">
-                            <span>{currency.flag}</span>
+                            <span>{currency.country}</span>
                             <span>{currency.code}</span>
                           </span>
                         </SelectItem>
@@ -327,18 +331,18 @@ export function ExchangeCalculator({
             </TabsContent>
 
             {/* Savings Info */}
-            <div className="bg-success/10 border border-success/30 rounded-lg p-3 text-center">
+            {/* <div className="bg-success/10 border border-success/30 rounded-lg p-3 text-center">
               <p className="text-sm text-success font-medium">
                 Save up to ₹
                 {formatCurrency((Number.parseFloat(amount) || 0) * 0.02)}{' '}
                 compared to banks!
               </p>
-            </div>
+            </div> */}
 
             {/* CTA Button */}
             <Button
               onClick={handleBookOrder}
-              className="w-full h-12 text-lg font-semibold bg-accent text-accent-foreground hover:bg-accent/90 gap-2"
+              className="w-full h-12 text-lg font-semibold bg-accent transition-all duration-300 shadow-lg hover:shadow-2xl hover:scale-105 group hover:hover:bg-primary gap-2 cursor-pointer text-white"
             >
               Book This Order
               <ArrowRight className="h-5 w-5" />

@@ -24,7 +24,6 @@ import {
   Shield,
   Smartphone,
 } from 'lucide-react';
-import urlOfBakEnd from '../../restData';
 import Image from 'next/image';
 import { useAuthStore } from '@/zustandStore/login';
 import { useRouter } from 'next/navigation'; // ✅ CORRECT
@@ -35,12 +34,14 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
   const router = useRouter();
+  const urlOfBackEnd = process.env.NEXT_PUBLIC_BACKEND_URL;
+
   const login = useAuthStore((s) => s.login);
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     try {
-      const res = await fetch(`${urlOfBakEnd}/api/auth/login`, {
+      const res = await fetch(`${urlOfBackEnd}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),

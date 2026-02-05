@@ -110,13 +110,13 @@ const conversionStats = [
 export default function UserProfile() {
   const [isEditing, setIsEditing] = useState(false);
   const [profileData, setProfileData] = useState({
-    name: 'Rajesh Kumar',
-    email: 'rajesh.kumar@gmail.com',
-    phone: '+91 98765 43210',
-    username: 'rajesh_forex',
+    name: 'Siddhanth Rajput',
+    email: 'siddhanthbal707@gmail.com',
+    phone: '+91 79823 99841',
+    username: 'siddhanth',
     address: '123 MG Road, Bangalore, Karnataka 560001',
-    city: 'Bangalore',
-    state: 'Karnataka',
+    city: 'Faridabad',
+    state: 'Haryana',
   });
 
   const [editData, setEditData] = useState(profileData);
@@ -141,10 +141,10 @@ export default function UserProfile() {
 
   return (
     <div className="min-h-screen bg-secondary/30">
-      <div className="max-w-[1200px] mx-auto px-4">
+      <div className="max-w-400 mx-auto px-4">
         {/* Header */}
         <header className="sticky top-0 z-40 bg-card border-b border-border">
-          <div className="max-w-[1200px] mx-auto px-4 flex items-center justify-between py-4">
+          <div className="max-w-400 mx-auto px-4 flex items-center justify-between py-4">
             <div className="flex items-center gap-4">
               <Link
                 href="/"
@@ -178,7 +178,7 @@ export default function UserProfile() {
 
         {/* Main Content */}
         <main className="w-full px-4 py-8">
-          <div className="max-w-[1200px] mx-auto">
+          <div className="max-w-400 mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-[360px_1fr] gap-8">
               {/* Profile Card */}
               <div className="col-span-1">
@@ -199,7 +199,7 @@ export default function UserProfile() {
                   <CardContent className="space-y-4">
                     <div className="space-y-3 text-sm">
                       <div className="flex items-center gap-3 p-2 rounded-lg bg-secondary/50">
-                        <Mail className="w-4 h-4 text-primary flex-shrink-0" />
+                        <Mail className="w-4 h-4 text-primary shrink-0" />
                         <div className="min-w-0">
                           <p className="text-xs text-muted-foreground">Email</p>
                           <p className="break-all font-medium">
@@ -208,14 +208,14 @@ export default function UserProfile() {
                         </div>
                       </div>
                       <div className="flex items-center gap-3 p-2 rounded-lg bg-secondary/50">
-                        <Phone className="w-4 h-4 text-primary flex-shrink-0" />
+                        <Phone className="w-4 h-4 text-primary shrink-0" />
                         <div>
                           <p className="text-xs text-muted-foreground">Phone</p>
                           <p className="font-medium">{profileData.phone}</p>
                         </div>
                       </div>
                       <div className="flex items-center gap-3 p-2 rounded-lg bg-secondary/50">
-                        <MapPin className="w-4 h-4 text-primary flex-shrink-0" />
+                        <MapPin className="w-4 h-4 text-primary shrink-0" />
                         <div>
                           <p className="text-xs text-muted-foreground">
                             Location
@@ -238,10 +238,9 @@ export default function UserProfile() {
                 </Card>
               </div>
 
-              {/* Profile Details & History */}
-              <div className="col-span-1 lg:col-span-2 space-y-8">
-                {/* Edit Form */}
-                {isEditing && (
+              {/* Edit Form - Shows between profile card and banner on mobile */}
+              {isEditing && (
+                <div className="col-span-1 lg:hidden">
                   <Card className="border-primary/20 bg-primary/5">
                     <CardHeader>
                       <CardTitle className="text-lg flex items-center justify-between">
@@ -255,7 +254,7 @@ export default function UserProfile() {
                       </CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-5">
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="grid grid-cols-1 gap-4">
                         <div className="space-y-2">
                           <label className="text-sm font-medium">
                             Full Name
@@ -331,19 +330,19 @@ export default function UserProfile() {
                             className="bg-background"
                           />
                         </div>
-                      </div>
-                      <div className="space-y-2">
-                        <label className="text-sm font-medium">
-                          Full Address
-                        </label>
-                        <Input
-                          value={editData.address}
-                          onChange={(e) =>
-                            handleChange('address', e.target.value)
-                          }
-                          placeholder="Complete Address"
-                          className="min-h-24 bg-background"
-                        />
+                        <div className="space-y-2">
+                          <label className="text-sm font-medium">
+                            Full Address
+                          </label>
+                          <Input
+                            value={editData.address}
+                            onChange={(e) =>
+                              handleChange('address', e.target.value)
+                            }
+                            placeholder="Complete Address"
+                            className="min-h-24 bg-background"
+                          />
+                        </div>
                       </div>
                       <div className="flex gap-3 pt-4">
                         <Button onClick={handleSave} className="flex-1 gap-2">
@@ -360,101 +359,230 @@ export default function UserProfile() {
                       </div>
                     </CardContent>
                   </Card>
-                )}
+                </div>
+              )}
 
-                {/* Conversion Statistics */}
-                <Card>
+              {/* Promotional Banner */}
+              <div className="col-span-1">
+                <div className="h-full min-h-70 lg:min-h-full rounded-xl overflow-hidden cursor-pointer transition-transform duration-300 ease-out hover:scale-[1.02] shadow-md hover:shadow-xl">
+                  {/* Replace the src below with your banner image */}
+                  <img
+                    src="/profile_banner.jpeg"
+                    alt="Banner"
+                    className="w-auto h-full"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Profile Details & History */}
+            <div className="space-y-8 mt-8">
+              {/* Edit Form - Shows in main content area on desktop */}
+              {isEditing && (
+                <Card className="hidden lg:block border-primary/20 bg-primary/5">
                   <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <TrendingUp className="w-5 h-5" />
-                      Your Performance
+                    <CardTitle className="text-lg flex items-center justify-between">
+                      Edit Personal Details
+                      <button
+                        onClick={handleCancel}
+                        className="text-muted-foreground hover:text-foreground"
+                      >
+                        <X className="w-5 h-5" />
+                      </button>
                     </CardTitle>
-                    <CardDescription>
-                      Currency conversion statistics and activity
-                    </CardDescription>
                   </CardHeader>
-                  <CardContent>
+                  <CardContent className="space-y-5">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {conversionStats.map((stat) => (
-                        <div
-                          key={stat.currency}
-                          className="rounded-lg border border-border p-4 hover:border-primary/50 transition-colors"
-                        >
-                          <div className="flex items-center justify-between mb-4">
-                            <div className="flex items-center gap-3">
-                              <span className="text-3xl">{stat.flag}</span>
-                              <div>
-                                <p className="font-semibold">{stat.currency}</p>
-                                <p className="text-xs text-muted-foreground">
-                                  {stat.conversions} conversions
-                                </p>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="space-y-2">
-                            <div className="flex justify-between text-sm">
-                              <span className="text-muted-foreground">
-                                Total Amount (INR)
-                              </span>
-                              <span className="font-semibold">
-                                ₹{stat.totalAmount.toLocaleString()}
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium">Full Name</label>
+                        <Input
+                          value={editData.name}
+                          onChange={(e) => handleChange('name', e.target.value)}
+                          placeholder="Full Name"
+                          className="bg-background"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium">Username</label>
+                        <Input
+                          value={editData.username}
+                          onChange={(e) =>
+                            handleChange('username', e.target.value)
+                          }
+                          placeholder="Username"
+                          className="bg-background"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium">
+                          Email Address
+                        </label>
+                        <Input
+                          type="email"
+                          value={editData.email}
+                          onChange={(e) =>
+                            handleChange('email', e.target.value)
+                          }
+                          placeholder="Email"
+                          className="bg-background"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium">
+                          Phone Number
+                        </label>
+                        <Input
+                          value={editData.phone}
+                          onChange={(e) =>
+                            handleChange('phone', e.target.value)
+                          }
+                          placeholder="Phone Number"
+                          className="bg-background"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium">State</label>
+                        <Input
+                          value={editData.state}
+                          onChange={(e) =>
+                            handleChange('state', e.target.value)
+                          }
+                          placeholder="State"
+                          className="bg-background"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium">City</label>
+                        <Input
+                          value={editData.city}
+                          onChange={(e) => handleChange('city', e.target.value)}
+                          placeholder="City"
+                          className="bg-background"
+                        />
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">
+                        Full Address
+                      </label>
+                      <Input
+                        value={editData.address}
+                        onChange={(e) =>
+                          handleChange('address', e.target.value)
+                        }
+                        placeholder="Complete Address"
+                        className="min-h-24 bg-background"
+                      />
+                    </div>
+                    <div className="flex gap-3 pt-4">
+                      <Button onClick={handleSave} className="flex-1 gap-2">
+                        <Save className="w-4 h-4" />
+                        Save Changes
+                      </Button>
+                      <Button
+                        onClick={handleCancel}
+                        variant="outline"
+                        className="flex-1 bg-transparent"
+                      >
+                        Cancel
+                      </Button>
                     </div>
                   </CardContent>
                 </Card>
+              )}
 
-                {/* Conversion History */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <History className="w-5 h-5" />
-                      Transaction History
-                    </CardTitle>
-                    <CardDescription>
-                      Your recent currency conversions
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-3">
-                      {conversionHistory.map((record) => (
-                        <div
-                          key={record.id}
-                          className="flex items-center justify-between p-4 rounded-lg border border-border hover:border-primary/50 hover:bg-secondary/50 transition-all"
-                        >
-                          <div className="flex items-center gap-4 flex-1">
-                            <div className="flex items-center gap-2">
-                              <Badge variant="outline" className="text-sm">
-                                {record.from}
-                              </Badge>
-                              <span className="text-muted-foreground">→</span>
-                              <Badge variant="outline" className="text-sm">
-                                {record.to}
-                              </Badge>
-                            </div>
-                            <div className="hidden sm:block">
-                              <p className="text-sm text-muted-foreground">
-                                Rate: {record.rate.toFixed(2)}
+              {/* Conversion Statistics */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <TrendingUp className="w-5 h-5" />
+                    Your Performance
+                  </CardTitle>
+                  <CardDescription>
+                    Currency conversion statistics and activity
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {conversionStats.map((stat) => (
+                      <div
+                        key={stat.currency}
+                        className="rounded-lg border border-border p-4 hover:border-primary/50 transition-colors"
+                      >
+                        <div className="flex items-center justify-between mb-4">
+                          <div className="flex items-center gap-3">
+                            <span className="text-3xl">{stat.flag}</span>
+                            <div>
+                              <p className="font-semibold">{stat.currency}</p>
+                              <p className="text-xs text-muted-foreground">
+                                {stat.conversions} conversions
                               </p>
                             </div>
                           </div>
-                          <div className="text-right">
-                            <p className="font-semibold">
-                              {record.converted.toFixed(2)} {record.to}
-                            </p>
-                            <p className="text-xs text-muted-foreground">
-                              {record.date}
+                        </div>
+                        <div className="space-y-2">
+                          <div className="flex justify-between text-sm">
+                            <span className="text-muted-foreground">
+                              Total Amount (INR)
+                            </span>
+                            <span className="font-semibold">
+                              ₹{stat.totalAmount.toLocaleString()}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Conversion History */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <History className="w-5 h-5" />
+                    Transaction History
+                  </CardTitle>
+                  <CardDescription>
+                    Your recent currency conversions
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    {conversionHistory.map((record) => (
+                      <div
+                        key={record.id}
+                        className="flex items-center justify-between p-4 rounded-lg border border-border hover:border-primary/50 hover:bg-secondary/50 transition-all"
+                      >
+                        <div className="flex items-center gap-4 flex-1">
+                          <div className="flex items-center gap-2">
+                            <Badge variant="outline" className="text-sm">
+                              {record.from}
+                            </Badge>
+                            <span className="text-muted-foreground">→</span>
+                            <Badge variant="outline" className="text-sm">
+                              {record.to}
+                            </Badge>
+                          </div>
+                          <div className="hidden sm:block">
+                            <p className="text-sm text-muted-foreground">
+                              Rate: {record.rate.toFixed(2)}
                             </p>
                           </div>
                         </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
+                        <div className="text-right">
+                          <p className="font-semibold">
+                            {record.converted.toFixed(2)} {record.to}
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            {record.date}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
             </div>
           </div>
         </main>

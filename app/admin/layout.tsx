@@ -1,0 +1,10 @@
+import React from "react"
+import { AdminProvider } from "@/app/contexts/admin-context";
+
+export default function AdminLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return <AdminProvider>{children}</AdminProvider>;
+}

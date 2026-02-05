@@ -3,6 +3,16 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@layer utilities {
+  .font-emoji {
+    font-family:
+      Apple Color Emoji,
+      Segoe UI Emoji,
+      Noto Color Emoji,
+      sans-serif !important;
+  }
+}
+
 :root {
   /* Professional forex/financial theme - Navy blue primary with gold accent */
   --background: #fff;
@@ -122,6 +132,9 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 }
+body {
+  @apply bg-background text-foreground;
+}
 
 @layer base {
   * {
@@ -140,6 +153,25 @@
   100% {
     transform: translateX(-50%);
   }
+}
+@keyframes marqueeScroll {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+.marquee-wrapper:hover .marquee-inner {
+  animation-play-state: paused;
+}
+
+.marquee-inner {
+  animation: marqueeScroll 25s linear infinite;
+}
+
+.marquee-reverse {
+  animation-direction: reverse;
 }
 
 .animate-scroll-left {

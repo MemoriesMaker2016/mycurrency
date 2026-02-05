@@ -12,23 +12,10 @@ export const metadata: Metadata = {
   title: 'mycurrency - Buy & Sell Foreign Currency at Best Rates',
   description:
     "India's leading forex marketplace. Buy foreign currency, send money abroad, and get forex cards at the best exchange rates with doorstep delivery.",
-  generator: 'v0.app',
+  generator: '',
   icons: {
-    icon: [
-      {
-        url: '/icon-light-32x32.png',
-        media: '(prefers-color-scheme: light)',
-      },
-      {
-        url: '/icon-dark-32x32.png',
-        media: '(prefers-color-scheme: dark)',
-      },
-      {
-        url: '/icon.svg',
-        type: 'image/svg+xml',
-      },
-    ],
-    apple: '/apple-icon.png',
+    icon: '/icon.png',
+    apple: '/icon.png',
   },
 };
 
