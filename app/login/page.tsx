@@ -27,6 +27,7 @@ import {
 import Image from 'next/image';
 import { useAuthStore } from '@/zustandStore/login';
 import { useRouter } from 'next/navigation'; // ✅ CORRECT
+import { loginUser } from '@/apiFasad/authApiCall';
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -34,30 +35,21 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
   const router = useRouter();
-  const urlOfBackEnd = process.env.NEXT_PUBLIC_BACKEND_URL;
+ const setUser = useAuthStore((s) => s.setUser);
 
-  const login = useAuthStore((s) => s.login);
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+    const payoad =  { email, password } 
     try {
-      const res = await fetch(`${urlOfBackEnd}/api/auth/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        alert(data.message || 'Login failed');
-        return;
+      const res = await loginUser(payoad)
+     console.log(res);
+     
+     if (!res?.ok) {
+        alert(res.message || 'Login failed');
       }
-
-      // ✅ SAVE TO ZUSTAND
-      login(data.token, data.user, rememberMe);
-
-      // ✅ GO TO HOME PAGE
+      setUser(res?.user)
+      
+      localStorage.setItem('token',res?.token)
       router.push('/');
     } catch (error) {
       console.error(error);

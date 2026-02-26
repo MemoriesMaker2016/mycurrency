@@ -35,6 +35,7 @@ import {
 } from 'lucide-react';
 import { useAuthStore } from '@/zustandStore/login';
 import { useRouter } from 'next/navigation';
+import { createOrder } from '@/apiFasad/apiCalls/buySellCurrancy';
 interface ExchangeCalculatorProps {
   defaultTab?: 'buy' | 'sell';
 }
@@ -44,7 +45,7 @@ export function ExchangeCalculator({
 }: ExchangeCalculatorProps) {
   const [activeTab, setActiveTab] = useState<'buy' | 'sell'>(defaultTab);
   const router = useRouter();
-  const { token, isAuthenticated } = useAuthStore();
+  const { user } = useAuthStore();
   const [fromCurrency, setFromCurrency] = useState('INR');
   const [toCurrency, setToCurrency] = useState('USD');
   const [amount, setAmount] = useState<string>('10000');
@@ -83,7 +84,7 @@ export function ExchangeCalculator({
   };
 
   const handleBookOrder = async () => {
-    if (!isAuthenticated || !token) {
+    if (user?.role !=='user') {
       router.push('/login');
       return;
     }
@@ -99,23 +100,9 @@ export function ExchangeCalculator({
         rate,
       };
 
-      const res = await fetch(`${urlOfBackEnd}/api/auth/create`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(payload),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        alert(data.message || 'Order failed');
-        return;
-      }
-
-      // ✅ success
+      const res = await createOrder(payload)
+   
+     // ✅ success
       setOpen(true);
     } catch (error) {
       console.error(error);

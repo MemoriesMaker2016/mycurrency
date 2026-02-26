@@ -1,15 +1,17 @@
-import { DELETE, GET, PUT } from "../httpMethod/method";
+import { DELETE, GET, POST, PUT } from "../httpMethod/method";
 import { ENDPOINTS } from "../apiEndPoints/auth.endpoints";
 
 
 export const getUsers = () =>
-  GET<any[]>(ENDPOINTS.USERS.LIST);
+  GET<any[]>(ENDPOINTS.USERS.userData);
 
-export const getUserById = (id: string) =>
-  GET(ENDPOINTS.USERS.DETAIL(id));
 
-export const updateUser = (id: string, data: any) =>
-  PUT(ENDPOINTS.USERS.DETAIL(id), data);
+export const getUsersDetails = () =>
+  GET<any[]>(ENDPOINTS.USERS.userDetails);
 
-export const deleteUser = (id: string) =>
-  DELETE(ENDPOINTS.USERS.DETAIL(id));
+
+export const updateUserDetails = (payload:any) =>
+  PUT(ENDPOINTS.USERS.userUpdate, payload);
+
+
+

@@ -1,12 +1,21 @@
 export const ENDPOINTS = {
   AUTH: {
-    LOGIN: "/auth/login",
-    REGISTER: "/auth/register",
-    LOGOUT: "/auth/logout",
-    ME: "/auth/me",
+    LOGIN: "/api/auth/login",
+    REGISTER: "/api/auth/register",
+    LOGOUT: "/api/auth/logout",
+    ME: "/api/auth/me",
   },
   USERS: {  
-    LIST: "/users",
-    DETAIL: (id: string) => `/users/${id}`,
+    userData: "/api/auth/user",
+    userDetails: "/api/auth/userDetails",
+    userUpdate: "/api/auth/userUpdate",
+    
   },
+  ORDERS: {
+    allFoxesOrder :"/api/auth/all/forex-orders"
+  },
+   BUYSELLCURRANCY: {  
+    createOrder: "/api/auth/createOrder",
+  },
+  
 };

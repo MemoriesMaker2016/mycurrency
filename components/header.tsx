@@ -14,20 +14,24 @@ import {
   X,
   Phone,
   ChevronDown,
-  TrendingUp,
   CreditCard,
   Send,
+  User,
 } from 'lucide-react';
 import Image from 'next/image';
 import { useAuthStore } from '@/zustandStore/login';
-import ProfileMenu from '@/app/profiledropdown/page';
-import { User } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const user = useAuthStore((s) => s.user);
-  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const [open, setOpen] = useState(false);
+
+  const user = useAuthStore((s) => s.user);
+  const logout = useAuthStore((s) => s.logout);
+  const isAuthenticated = !!user;
+console.log(user);
+
+  const router = useRouter();
   const ref = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -40,6 +44,15 @@ export function Header() {
     document.addEventListener('mousedown', handler);
     return () => document.removeEventListener('mousedown', handler);
   }, []);
+
+  const handleLogout = () => {
+    logout();
+    setOpen(false);
+    router.push('/login');
+  };
+
+  const profileRoute =
+    user?.role === 'admin' ? '/admin' : '/profile';
 
   return (
     <header className="sticky top-0 z-50 w-full bg-card border-b border-border shadow-lg">
@@ -62,7 +75,7 @@ export function Header() {
             </span>
           </div>
           <div className="flex items-center gap-3">
-            <Link href="#" className="hover:underline">
+            <Link href="/track-orders" className="hover:underline">
               Track Order
             </Link>
             <span className="text-primary-foreground/70">|</span>
@@ -132,21 +145,6 @@ export function Header() {
               </Button>
             </Link>
 
-            {/* <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="flex items-center gap-1">
-                  Forex Cards
-                  <ChevronDown className="h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="start" className="w-56">
-                <DropdownMenuItem>Multi-Currency Card</DropdownMenuItem>
-                <DropdownMenuItem>Single Currency Card</DropdownMenuItem>
-                <DropdownMenuItem>Student Forex Card</DropdownMenuItem>
-                <DropdownMenuItem>Reload / Unload Card</DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu> */}
-
             <Link href="/rates">
               <Button variant="ghost" className="cursor-pointer">
                 Live Rates
@@ -157,7 +155,6 @@ export function Header() {
                 About Us
               </Button>
             </Link>
-
             <Link href="/contact">
               <Button variant="ghost" className="cursor-pointer">
                 Contact
@@ -166,9 +163,38 @@ export function Header() {
           </nav>
 
           {/* CTA Buttons */}
-          {isAuthenticated && user ? (
-            <div className="hidden lg:flex items-center justify-end">
-              dahskjdhashkjh
+          {isAuthenticated ? (
+            <div ref={ref} className="hidden lg:flex items-center relative">
+              <button
+                onClick={() => setOpen((prev) => !prev)}
+                className="flex items-center gap-2 font-medium"
+              >
+                <div className="w-8 h-8 rounded-full bg-accent text-white flex items-center justify-center">
+                  {user?.firstName ? user?.firstName.slice(0,1) :  <User size={16} />}
+                </div>
+                <span className="hidden lg:block">
+                  {user?.firstName}
+                </span>
+              </button>
+
+              {open && (
+                <div className="absolute right-0 mt-2 w-40 bg-white border shadow-lg rounded-md z-50">
+                  <Link
+                    href={profileRoute}
+                    className="block px-4 py-2 hover:bg-gray-100"
+                    onClick={() => setOpen(false)}
+                  >
+                    My Profile
+                  </Link>
+
+                  <button
+                    onClick={handleLogout}
+                    className="w-full text-left px-4 py-2 hover:bg-gray-100 text-red-600"
+                  >
+                    Logout
+                  </button>
+                </div>
+              )}
             </div>
           ) : (
             <div className="hidden lg:flex items-center gap-3">
@@ -187,39 +213,6 @@ export function Header() {
               </Link>
             </div>
           )}
-          <div ref={ref} className="relative">
-            {/* Profile button */}
-            <button
-              onClick={() => setOpen((prev) => !prev)}
-              className="flex items-center gap-2 font-medium"
-            >
-              <div className="w-8 h-8 rounded-full bg-accent text-white flex items-center justify-center">
-                <User size={16} />
-              </div>
-              <span className="hidden lg:block">Siddhanth</span>
-            </button>
-
-            {/* Dropdown */}
-            {open && (
-              <div className="absolute right-0 mt-2 w-40 bg-white border shadow-lg rounded-md z-50">
-                <Link
-                  href="/profile"
-                  className="block px-4 py-2 hover:bg-gray-100"
-                  onClick={() => setOpen(false)}
-                >
-                  My Profile
-                </Link>
-
-                {/* Logout button (NO behavior yet) */}
-                <button
-                  type="button"
-                  className="w-full text-left px-4 py-2 hover:bg-gray-100 text-red-600"
-                >
-                  Logout
-                </button>
-              </div>
-            )}
-          </div>
 
           {/* Mobile Menu Button */}
           <Button
@@ -240,60 +233,46 @@ export function Header() {
         {mobileMenuOpen && (
           <div className="lg:hidden py-4 border-t border-border">
             <nav className="flex flex-col gap-2">
-              <Link
-                href="/exchange"
-                className="px-4 py-2 hover:bg-secondary rounded-md"
-              >
+              <Link href="/exchange" className="px-4 py-2 hover:bg-secondary rounded-md">
                 Buy Currency
               </Link>
-              <Link
-                href="/exchange?type=sell"
-                className="px-4 py-2 hover:bg-secondary rounded-md"
-              >
+              <Link href="/exchange?type=sell" className="px-4 py-2 hover:bg-secondary rounded-md">
                 Sell Currency
               </Link>
-              <Link
-                href="/transfer"
-                className="px-4 py-2 hover:bg-secondary rounded-md"
-              >
+              <Link href="/transfer" className="px-4 py-2 hover:bg-secondary rounded-md">
                 Money Transfer
               </Link>
-              <Link
-                href="/rates"
-                className="px-4 py-2 hover:bg-secondary rounded-md"
-              >
+              <Link href="/rates" className="px-4 py-2 hover:bg-secondary rounded-md">
                 Live Rates
               </Link>
-              <Link
-                href="/about"
-                className="px-4 py-2 hover:bg-secondary rounded-md"
-              >
+              <Link href="/about" className="px-4 py-2 hover:bg-secondary rounded-md">
                 About Us
               </Link>
-              <Link
-                href="/contact"
-                className="px-4 py-2 hover:bg-secondary rounded-md"
-              >
+              <Link href="/contact" className="px-4 py-2 hover:bg-secondary rounded-md">
                 Contact
               </Link>
-              {isAuthenticated && user ? (
-                <></>
+
+              {isAuthenticated ? (
+                <>
+                  <Link href={profileRoute} className="px-4 py-2 hover:bg-secondary rounded-md">
+                    My Profile
+                  </Link>
+                  <button
+                    onClick={handleLogout}
+                    className="text-left px-4 py-2 text-red-600 hover:bg-secondary rounded-md"
+                  >
+                    Logout
+                  </button>
+                </>
               ) : (
                 <div className="flex gap-2 px-4 pt-2">
                   <Link href="/login">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="flex-1 bg-transparent"
-                    >
+                    <Button variant="outline" size="sm" className="flex-1 bg-transparent">
                       Login
                     </Button>
                   </Link>
                   <Link href="/register">
-                    <Button
-                      size="sm"
-                      className="flex-1 bg-accent text-accent-foreground"
-                    >
+                    <Button size="sm" className="flex-1 bg-accent text-accent-foreground">
                       Sign Up
                     </Button>
                   </Link>
