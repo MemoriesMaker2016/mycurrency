@@ -1,3 +1,4 @@
+import { loginOutUser } from "@/apiFasad/authApiCall";
 import { create } from "zustand";
 
 type User = {
@@ -16,8 +17,8 @@ type AuthState = {
 export const useAuthStore = create<AuthState>((set) => ({
   user: null,
   setUser: (user) => set({ user }),
-  logout: () => {
-    localStorage.removeItem('token')
-    set({ user: null })
-  },
+logout: async () => {
+  await loginOutUser()
+  set({ user: null })
+}
 }));

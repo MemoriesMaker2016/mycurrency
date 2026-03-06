@@ -48,8 +48,6 @@ export default function LoginPage() {
         alert(res.message || 'Login failed');
       }
       setUser(res?.user)
-      
-      localStorage.setItem('token',res?.token)
       router.push('/');
     } catch (error) {
       console.error(error);

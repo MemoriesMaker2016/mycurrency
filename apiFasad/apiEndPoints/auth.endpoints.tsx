@@ -7,7 +7,7 @@ export const ENDPOINTS = {
   },
   USERS: {  
     userData: "/api/auth/user",
-    userDetails: "/api/auth/userDetails",
+    userDetails: "/api/auth/userProfiles",
     userUpdate: "/api/auth/userUpdate",
     
   },
@@ -17,5 +17,11 @@ export const ENDPOINTS = {
    BUYSELLCURRANCY: {  
     createOrder: "/api/auth/createOrder",
   },
+  ADMIN:
+  {
+    allUserData: '/api/auth/admin/users',
+    allUserOrderData: '/api/auth/admin/forexOrders'
+     
+  }
   
 };

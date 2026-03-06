@@ -87,10 +87,6 @@ const handleSubmit = async (e: React.FormEvent) => {
 
     // Use your POST helper
     const data = await registerUser(payload)
-    alert('Account created successfully!');
-    console.log('User registered:', data);
-    localStorage.setItem("token",data?.token)
-    // Optionally, redirect to login page
     router.push('/');
   } catch (error: any) {
     console.error('Network error:', error);

@@ -10,7 +10,7 @@ import { ForexCardSection } from '@/components/forexCardSection';
 
 export default function HomePage() {
   return (
-    <AuthProvider>
+   
       <div className="min-h-screen flex flex-col">
         <Header />
         <RateTicker />
@@ -23,6 +23,5 @@ export default function HomePage() {
         </main>
         <Footer />
       </div>
-    </AuthProvider>
   );
 }

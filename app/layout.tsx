@@ -4,6 +4,7 @@ import { Inter, Geist_Mono } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/next';
 import { ScrollToTop } from '@/components/scroll-to-top';
 import './globals.css';
+import { AuthProvider } from '@/components/AuthProvider';
 
 const _inter = Inter({ subsets: ['latin'] });
 const _geistMono = Geist_Mono({ subsets: ['latin'] });
@@ -27,9 +28,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`font-sans antialiased`}>
+        <AuthProvider>
+
         {children}
         <ScrollToTop />
         <Analytics />
+        </AuthProvider>
       </body>
     </html>
   );

@@ -9,4 +9,8 @@ export const loginUser = (payload:any) =>
   POST(ENDPOINTS.AUTH.LOGIN ,payload);
 
 
+export const loginOutUser = () =>
+  POST(ENDPOINTS.AUTH.LOGOUT);
+
+
 
