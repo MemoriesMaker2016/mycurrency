@@ -54,14 +54,16 @@ export function AdminHeader({
         <div className="flex items-center gap-3 ml-auto">
 
           {/* Notifications */}
+          <Link href={'/admin/notifications'}>
           <Button variant="ghost" size="icon" className="relative" aria-label="Notifications">
             <Bell className="w-5 h-5" />
             {notificationCount > 0 && (
-              <span className="absolute -top-1 -right-1 min-w-[20px] h-5 px-1 bg-destructive text-destructive-foreground text-xs rounded-full flex items-center justify-center">
+                <span className="absolute -top-1 -right-1 min-w-[20px] h-5 px-1 bg-destructive text-destructive-foreground text-xs rounded-full flex items-center justify-center">
                 {notificationCount > 99 ? "99+" : notificationCount}
               </span>
             )}
           </Button>
+            </Link>
 
           {/* Profile dropdown */}
           <DropdownMenu>

@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { useState, useRef, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
+import Link from "next/link";
+import { useState, useRef, useEffect } from "react";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+} from "@/components/ui/dropdown-menu";
 import {
   Menu,
   X,
@@ -17,10 +17,11 @@ import {
   CreditCard,
   Send,
   User,
-} from 'lucide-react';
-import Image from 'next/image';
-import { useAuthStore } from '@/zustandStore/login';
-import { useRouter } from 'next/navigation';
+  Bell,
+} from "lucide-react";
+import Image from "next/image";
+import { useAuthStore } from "@/zustandStore/login";
+import { useRouter } from "next/navigation";
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -29,7 +30,7 @@ export function Header() {
   const user = useAuthStore((s) => s.user);
   const logout = useAuthStore((s) => s.logout);
   const isAuthenticated = !!user;
-console.log(user);
+  console.log(user);
 
   const router = useRouter();
   const ref = useRef<HTMLDivElement | null>(null);
@@ -41,18 +42,17 @@ console.log(user);
       }
     };
 
-    document.addEventListener('mousedown', handler);
-    return () => document.removeEventListener('mousedown', handler);
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
   }, []);
 
   const handleLogout = () => {
     logout();
     setOpen(false);
-    router.push('/login');
+    router.push("/login");
   };
 
-  const profileRoute =
-    user?.role === 'admin' ? '/admin' : '/profile';
+  const profileRoute = user?.role === "admin" ? "/admin" : "/profile";
 
   return (
     <header className="sticky top-0 z-50 w-full bg-card border-b border-border shadow-lg">
@@ -170,12 +170,29 @@ console.log(user);
                 className="flex items-center gap-2 font-medium"
               >
                 <div className="w-8 h-8 rounded-full bg-accent text-white flex items-center justify-center">
-                  {user?.firstName ? user?.firstName.slice(0,1) :  <User size={16} />}
+                  {user?.firstName ? (
+                    user?.firstName.slice(0, 1)
+                  ) : (
+                    <User size={16} />
+                  )}
                 </div>
-                <span className="hidden lg:block">
-                  {user?.firstName}
-                </span>
+                <span className="hidden lg:block">{user?.firstName}</span>
               </button>
+
+              <Link href={"/notifications"}>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="relative"
+                  aria-label="Notifications"
+                >
+                  <Bell className="w-5 h-5" />
+
+                  <span className="absolute -top-1 -right-1 min-w-[20px] h-5 px-1 bg-destructive text-destructive-foreground text-xs rounded-full flex items-center justify-center">
+                    10
+                  </span>
+                </Button>
+              </Link>
 
               {open && (
                 <div className="absolute right-0 mt-2 w-40 bg-white border shadow-lg rounded-md z-50">
@@ -233,28 +250,49 @@ console.log(user);
         {mobileMenuOpen && (
           <div className="lg:hidden py-4 border-t border-border">
             <nav className="flex flex-col gap-2">
-              <Link href="/exchange" className="px-4 py-2 hover:bg-secondary rounded-md">
+              <Link
+                href="/exchange"
+                className="px-4 py-2 hover:bg-secondary rounded-md"
+              >
                 Buy Currency
               </Link>
-              <Link href="/exchange?type=sell" className="px-4 py-2 hover:bg-secondary rounded-md">
+              <Link
+                href="/exchange?type=sell"
+                className="px-4 py-2 hover:bg-secondary rounded-md"
+              >
                 Sell Currency
               </Link>
-              <Link href="/transfer" className="px-4 py-2 hover:bg-secondary rounded-md">
+              <Link
+                href="/transfer"
+                className="px-4 py-2 hover:bg-secondary rounded-md"
+              >
                 Money Transfer
               </Link>
-              <Link href="/rates" className="px-4 py-2 hover:bg-secondary rounded-md">
+              <Link
+                href="/rates"
+                className="px-4 py-2 hover:bg-secondary rounded-md"
+              >
                 Live Rates
               </Link>
-              <Link href="/about" className="px-4 py-2 hover:bg-secondary rounded-md">
+              <Link
+                href="/about"
+                className="px-4 py-2 hover:bg-secondary rounded-md"
+              >
                 About Us
               </Link>
-              <Link href="/contact" className="px-4 py-2 hover:bg-secondary rounded-md">
+              <Link
+                href="/contact"
+                className="px-4 py-2 hover:bg-secondary rounded-md"
+              >
                 Contact
               </Link>
 
               {isAuthenticated ? (
                 <>
-                  <Link href={profileRoute} className="px-4 py-2 hover:bg-secondary rounded-md">
+                  <Link
+                    href={profileRoute}
+                    className="px-4 py-2 hover:bg-secondary rounded-md"
+                  >
                     My Profile
                   </Link>
                   <button
@@ -267,12 +305,19 @@ console.log(user);
               ) : (
                 <div className="flex gap-2 px-4 pt-2">
                   <Link href="/login">
-                    <Button variant="outline" size="sm" className="flex-1 bg-transparent">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="flex-1 bg-transparent"
+                    >
                       Login
                     </Button>
                   </Link>
                   <Link href="/register">
-                    <Button size="sm" className="flex-1 bg-accent text-accent-foreground">
+                    <Button
+                      size="sm"
+                      className="flex-1 bg-accent text-accent-foreground"
+                    >
                       Sign Up
                     </Button>
                   </Link>

@@ -9,6 +9,7 @@ export const ENDPOINTS = {
     userData: "/api/auth/user",
     userDetails: "/api/auth/userProfiles",
     userUpdate: "/api/auth/userUpdate",
+    userTrackOrder: "/api/auth/ordersTrack",
     
   },
   ORDERS: {
@@ -20,7 +21,8 @@ export const ENDPOINTS = {
   ADMIN:
   {
     allUserData: '/api/auth/admin/users',
-    allUserOrderData: '/api/auth/admin/forexOrders'
+    allUserOrderData: '/api/auth/admin/orders'
+    
      
   }
   

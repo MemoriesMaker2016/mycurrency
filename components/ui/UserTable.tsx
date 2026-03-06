@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import { MoreHorizontal, Search, Filter } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -15,6 +15,7 @@ import {
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
+import { useAdmin } from "@/app/contexts/admin-context";
 
 // ─────────────────────────────────────────────────────────────
 // Types
@@ -54,13 +55,12 @@ function RoleBadge({ role }: { role: string }) {
   return <Badge className="bg-emerald-100 text-emerald-700 hover:bg-emerald-100">User</Badge>;
 }
 
-function StatusDot({ status }: { status: string }) {
-  const active = status === "active";
+function StatusDot({ isActive }: { isActive: boolean }) {
   return (
     <div className="flex items-center gap-2">
-      <span className={`w-2.5 h-2.5 rounded-full shrink-0 ${active ? "bg-emerald-500" : "bg-red-400"}`} />
-      <span className={`text-xs font-medium ${active ? "text-emerald-600" : "text-red-500"}`}>
-        {active ? "Active" : "Inactive"}
+      <span className={`w-2.5 h-2.5 rounded-full shrink-0 ${isActive ? "bg-emerald-500" : "bg-red-400"}`} />
+      <span className={`text-xs font-medium ${isActive ? "text-emerald-600" : "text-red-500"}`}>
+        {isActive ? "Active" : "Inactive"}
       </span>
     </div>
   );
@@ -91,6 +91,7 @@ export function UsersTable({
   onStatusFilterChange, onSearchChange,
   onEdit, onDelete,
 }: UsersTableProps) {
+  const { activeUserIds } = useAdmin(); // Get live active users from context
   const startIndex = (currentPage - 1) * itemsPerPage;
 
   return (
@@ -107,7 +108,6 @@ export function UsersTable({
           </div>
 
           <div className="flex items-center gap-2">
-            {/* Mobile-only search */}
             <div className="relative sm:hidden flex-1">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <Input
@@ -161,7 +161,6 @@ export function UsersTable({
               ) : (
                 users.map((user) => (
                   <TableRow key={user._id}>
-                    {/* User */}
                     <TableCell>
                       <div className="flex items-center gap-3">
                         <Avatar className="h-9 w-9">
@@ -177,17 +176,20 @@ export function UsersTable({
 
                     <TableCell className="hidden md:table-cell text-sm">{user.phone}</TableCell>
                     <TableCell className="hidden md:table-cell text-sm">{user.country}</TableCell>
-                    <TableCell><StatusDot status={user.status} /></TableCell>
+
+                    {/* Status: Active/Inactive based on live socket */}
+                    <TableCell>
+                      <StatusDot isActive={activeUserIds.includes(user._id)} />
+                    </TableCell>
+
                     <TableCell><RoleBadge role={user.role} /></TableCell>
 
-                    {/* Joined */}
                     <TableCell className="hidden sm:table-cell text-sm text-muted-foreground">
                       {new Date(user.createdAt).toLocaleDateString("en-IN", {
                         day: "2-digit", month: "short", year: "numeric",
                       })}
                     </TableCell>
 
-                    {/* Actions */}
                     <TableCell className="text-right">
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>

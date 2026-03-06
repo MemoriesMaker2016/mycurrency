@@ -91,7 +91,7 @@ export function ExchangeCalculator({
 
     try {
       const payload = {
-        orderType: 'buy', // buy | sell
+        orderType: activeTab, 
         product, // notes | card
         fromCurrency: activeTab === 'buy' ? 'INR' : fromCurrency,
         toCurrency: activeTab === 'buy' ? toCurrency : 'INR',

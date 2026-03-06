@@ -2,39 +2,8 @@
 
 import React from 'react';
 
-import { useState, useRef, useEffect } from 'react';
 import { useAdmin } from '@/app/contexts/admin-context';
-import Link from 'next/link';
-import {
-  Home,
-  Users,
-  ArrowLeftRight,
-  FileText,
-  AlertCircle,
-  BarChart3,
-  Shield,
-  Settings,
-  Search,
-  Bell,
-  Download,
-  LogOut,
-  Menu,
-  X,
-  Camera,
-  Mail,
-  Phone,
-  MapPin,
-  Lock,
-  Eye,
-  EyeOff,
-  Save,
-  User,
-  BellRing,
-  Globe,
-  Moon,
-  Sun,
-  RefreshCcw,
-} from 'lucide-react';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -44,10 +13,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Badge } from '@/components/ui/badge';
 import { Label } from '@/components/ui/label';
-import { Switch } from '@/components/ui/switch';
 import {
   Select,
   SelectContent,
@@ -55,16 +21,28 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import { Separator } from '@/components/ui/separator';
-import Image from 'next/image';
+import { Switch } from '@/components/ui/switch';
+import {
+  BellRing,
+  Camera,
+  Eye,
+  EyeOff,
+  Globe,
+  Home,
+  Lock,
+  Mail,
+  MapPin,
+  Moon,
+  Phone,
+  RefreshCcw,
+  Save,
+  Settings,
+  Sun,
+  User,
+  Users
+} from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
 
 const navigationItems = [
   { icon: Home, label: 'Dashboard', href: '/admin', active: false },

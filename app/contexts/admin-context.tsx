@@ -7,6 +7,7 @@ import {
   useEffect,
   type ReactNode,
 } from 'react';
+import { io } from 'socket.io-client';
 
 interface AdminProfile {
   name: string;
@@ -36,7 +37,29 @@ const AdminContext = createContext<AdminContextType | undefined>(undefined);
 export function AdminProvider({ children }: { children: ReactNode }) {
   const [profile, setProfile] = useState<AdminProfile>(defaultProfile);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [activeUsersCount, setActiveUsersCount] = useState(0);
+  const [activeUserIds, setActiveUserIds] = useState<string[]>([]);
 
+console.log(activeUserIds);
+
+
+  useEffect(() => {
+   const socket = io(process.env.NEXT_PUBLIC_API_URL!);
+
+    socket.emit("adminJoin");
+
+    socket.on("activeUsers", (data: { count: number; ids: string[] }) => {
+      setActiveUsersCount(data.count);
+      setActiveUserIds(data.ids);
+    });
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
+
+
+
+  
   // Load from localStorage on mount
   useEffect(() => {
     const saved = localStorage.getItem('adminProfile');
@@ -62,7 +85,7 @@ export function AdminProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AdminContext.Provider value={{ profile, updateProfile }}>
+    <AdminContext.Provider value={{ profile, updateProfile ,activeUsersCount ,activeUserIds }}>
       {children}
     </AdminContext.Provider>
   );
