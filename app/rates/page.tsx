@@ -1,30 +1,44 @@
-"use client"
+'use client';
 
-import { useState } from "react"
-import { Header } from "@/components/header"
-import { Footer } from "@/components/footer"
-import { RateTicker } from "@/components/rate-ticker"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { currencies } from "@/lib/currencies"
-import { Search, RefreshCw, Bell, Download, TrendingUp, TrendingDown } from "lucide-react"
+import { useState } from 'react';
+import Header from '@/components/header';
+import Footer from '@/components/footer';
+import { RateTicker } from '@/components/rate-ticker';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
+import { currencies } from '@/lib/currencies';
+import {
+  Search,
+  RefreshCw,
+  Bell,
+  Download,
+  TrendingUp,
+  TrendingDown,
+} from 'lucide-react';
 
 export default function RatesPage() {
-  const [searchTerm, setSearchTerm] = useState("")
-  const [isRefreshing, setIsRefreshing] = useState(false)
+  const [searchTerm, setSearchTerm] = useState('');
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   const filteredCurrencies = currencies.filter(
     (c) =>
       c.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       c.code.toLowerCase().includes(searchTerm.toLowerCase()),
-  )
+  );
 
   const handleRefresh = () => {
-    setIsRefreshing(true)
-    setTimeout(() => setIsRefreshing(false), 1000)
-  }
+    setIsRefreshing(true);
+    setTimeout(() => setIsRefreshing(false), 1000);
+  };
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -35,19 +49,38 @@ export default function RatesPage() {
           {/* Header */}
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-8">
             <div>
-              <h1 className="text-3xl font-bold text-foreground mb-2">Live Exchange Rates</h1>
-              <p className="text-muted-foreground">Real-time forex rates for 40+ currencies. Last updated: Just now</p>
+              <h1 className="text-3xl font-bold text-foreground mb-2">
+                Live Exchange Rates
+              </h1>
+              <p className="text-muted-foreground">
+                Real-time forex rates for 40+ currencies. Last updated: Just now
+              </p>
             </div>
             <div className="flex items-center gap-3">
-              <Button variant="outline" size="sm" onClick={handleRefresh} className="gap-2 bg-transparent">
-                <RefreshCw className={`h-4 w-4 ${isRefreshing ? "animate-spin" : ""}`} />
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleRefresh}
+                className="gap-2 bg-transparent"
+              >
+                <RefreshCw
+                  className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`}
+                />
                 Refresh
               </Button>
-              <Button variant="outline" size="sm" className="gap-2 bg-transparent">
+              <Button
+                variant="outline"
+                size="sm"
+                className="gap-2 bg-transparent"
+              >
                 <Bell className="h-4 w-4" />
                 Set Alert
               </Button>
-              <Button variant="outline" size="sm" className="gap-2 bg-transparent">
+              <Button
+                variant="outline"
+                size="sm"
+                className="gap-2 bg-transparent"
+              >
                 <Download className="h-4 w-4" />
                 Export
               </Button>
@@ -73,22 +106,39 @@ export default function RatesPage() {
                 <TableHeader>
                   <TableRow className="bg-secondary/50">
                     <TableHead className="font-semibold">Currency</TableHead>
-                    <TableHead className="text-right font-semibold">Buy Rate</TableHead>
-                    <TableHead className="text-right font-semibold">Sell Rate</TableHead>
-                    <TableHead className="text-right font-semibold">Remit Rate</TableHead>
-                    <TableHead className="text-right font-semibold">Change</TableHead>
-                    <TableHead className="text-right font-semibold">Action</TableHead>
+                    <TableHead className="text-right font-semibold">
+                      Buy Rate
+                    </TableHead>
+                    <TableHead className="text-right font-semibold">
+                      Sell Rate
+                    </TableHead>
+                    <TableHead className="text-right font-semibold">
+                      Remit Rate
+                    </TableHead>
+                    <TableHead className="text-right font-semibold">
+                      Change
+                    </TableHead>
+                    <TableHead className="text-right font-semibold">
+                      Action
+                    </TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {filteredCurrencies.map((currency, index) => (
-                    <TableRow key={currency.code} className="hover:bg-secondary/30">
+                    <TableRow
+                      key={currency.code}
+                      className="hover:bg-secondary/30"
+                    >
                       <TableCell>
                         <div className="flex items-center gap-3">
                           <span className="text-2xl">{currency.flag}</span>
                           <div>
-                            <p className="font-semibold text-foreground">{currency.code}</p>
-                            <p className="text-sm text-muted-foreground">{currency.name}</p>
+                            <p className="font-semibold text-foreground">
+                              {currency.code}
+                            </p>
+                            <p className="text-sm text-muted-foreground">
+                              {currency.name}
+                            </p>
                           </div>
                         </div>
                       </TableCell>
@@ -99,7 +149,9 @@ export default function RatesPage() {
                         ₹{currency.sellRate.toFixed(2)}
                       </TableCell>
                       <TableCell className="text-right font-semibold text-foreground">
-                        {currency.remitRate ? `₹${currency.remitRate.toFixed(2)}` : "N/A"}
+                        {currency.remitRate
+                          ? `₹${currency.remitRate.toFixed(2)}`
+                          : 'N/A'}
                       </TableCell>
                       <TableCell className="text-right">
                         {index % 2 === 0 ? (
@@ -135,28 +187,33 @@ export default function RatesPage() {
           <div className="mt-8 grid md:grid-cols-2 gap-6">
             <Card className="border-border">
               <CardContent className="p-6">
-                <h3 className="font-semibold text-foreground mb-3">Understanding Our Rates</h3>
+                <h3 className="font-semibold text-foreground mb-3">
+                  Understanding Our Rates
+                </h3>
                 <ul className="space-y-2 text-sm text-muted-foreground">
                   <li>
-                    <strong className="text-foreground">Buy Rate:</strong> The rate at which you buy foreign currency
-                    from us
+                    <strong className="text-foreground">Buy Rate:</strong> The
+                    rate at which you buy foreign currency from us
                   </li>
                   <li>
-                    <strong className="text-foreground">Sell Rate:</strong> The rate at which you sell foreign currency
-                    to us
+                    <strong className="text-foreground">Sell Rate:</strong> The
+                    rate at which you sell foreign currency to us
                   </li>
                   <li>
-                    <strong className="text-foreground">Remit Rate:</strong> The rate for international wire transfers
+                    <strong className="text-foreground">Remit Rate:</strong> The
+                    rate for international wire transfers
                   </li>
                 </ul>
               </CardContent>
             </Card>
             <Card className="border-border">
               <CardContent className="p-6">
-                <h3 className="font-semibold text-foreground mb-3">Rate Alerts</h3>
+                <h3 className="font-semibold text-foreground mb-3">
+                  Rate Alerts
+                </h3>
                 <p className="text-sm text-muted-foreground mb-4">
-                  Set up rate alerts to get notified when your target rate is reached. Never miss the best time to
-                  exchange currency.
+                  Set up rate alerts to get notified when your target rate is
+                  reached. Never miss the best time to exchange currency.
                 </p>
                 <Button className="gap-2">
                   <Bell className="h-4 w-4" />
@@ -169,5 +226,5 @@ export default function RatesPage() {
       </main>
       <Footer />
     </div>
-  )
+  );
 }

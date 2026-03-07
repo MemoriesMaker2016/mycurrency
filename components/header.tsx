@@ -23,7 +23,7 @@ import Image from "next/image";
 import { useAuthStore } from "@/zustandStore/login";
 import { useRouter } from "next/navigation";
 
-export function Header() {
+export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [open, setOpen] = useState(false);
 

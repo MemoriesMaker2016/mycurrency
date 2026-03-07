@@ -1,9 +1,9 @@
-import { Header } from '@/components/header';
-import { Footer } from '@/components/footer';
+import Header from '@/components/header';
+import Footer from '@/components/footer';
 import { RateTicker } from '@/components/rate-ticker';
 import { HeroSection } from '@/components/hero-section';
 import { ServicesSection } from '@/components/services-section';
-import { TestimonialSection } from '@/components/testimonials-section';
+import TestimonialSection from '@/components/testimonials-section';
 import { CTASection } from '@/components/cta-section';
 import { AuthProvider } from '@/components/AuthProvider';
 import { ForexCardSection } from '@/components/forexCardSection';
