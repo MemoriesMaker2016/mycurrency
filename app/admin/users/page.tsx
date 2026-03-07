@@ -54,7 +54,7 @@ const ITEMS_PER_PAGE = 10;
 // ─────────────────────────────────────────────────────────────
 // Stat cards
 // ─────────────────────────────────────────────────────────────
-function StatsCards({ totalUsers ,activeUsers }: { totalUsers: number  , activeUsers:number}) {
+function StatsCards({ totalUsers ,activeUsers  , inActiveUser}: { totalUsers: number  , activeUsers:number ,inActiveUser:number}) {
   const cards = [
     {
       icon: Users,
@@ -75,7 +75,7 @@ function StatsCards({ totalUsers ,activeUsers }: { totalUsers: number  , activeU
       bg: "bg-amber-100",
       iconColor: "text-amber-600",
       label: "Pending",
-      value: "—",
+      value: inActiveUser,
     },
     {
       icon: Shield,
@@ -122,7 +122,8 @@ export default function UsersPage() {
   const [loading, setLoading] = useState(true);
   const [editingUser, setEditingUser] = useState<User | null>(null);
   const {activeUsersCount} = useAdmin()
-console.log("user is " , users);
+  const inActiveUser = totalUsers-activeUsersCount 
+console.log("user is " , inActiveUser);
 
   // ── fetch ──────────────────────────────────────────────────
   const fetchUsers = useCallback(async () => {
@@ -223,7 +224,7 @@ console.log("user is " , users);
             </Button>
           </div>
 
-          <StatsCards totalUsers={totalUsers} activeUsers={activeUsersCount} />
+          <StatsCards totalUsers={totalUsers} activeUsers={activeUsersCount}  inActiveUser={inActiveUser}/>
 
           <UsersTable
             users={users}

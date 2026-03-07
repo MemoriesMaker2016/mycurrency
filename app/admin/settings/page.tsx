@@ -43,6 +43,7 @@ import {
   Users
 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
+import { useAuthStore } from '@/zustandStore/login';
 
 const navigationItems = [
   { icon: Home, label: 'Dashboard', href: '/admin', active: false },
@@ -63,8 +64,7 @@ export default function AdminSettingsPage() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [saving, setSaving] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const { profile: adminProfile, updateProfile } = useAdmin();
-  const { profile } = useAdmin();
+  const adminProfile = useAuthStore((e)=>e.user)
 
   const [localProfile, setLocalProfile] = useState({
     name: '',
@@ -76,9 +76,7 @@ export default function AdminSettingsPage() {
   });
 
   // Sync local state with context on mount
-  useEffect(() => {
-    setLocalProfile(adminProfile);
-  }, [adminProfile]);
+
 
   const [passwords, setPasswords] = useState({
     current: '',
@@ -125,7 +123,7 @@ export default function AdminSettingsPage() {
     // Simulate API call
     await new Promise((resolve) => setTimeout(resolve, 1000));
     // Update the shared context so changes reflect across all pages
-    updateProfile(localProfile);
+   
     setSaving(false);
   };
 
@@ -210,7 +208,7 @@ export default function AdminSettingsPage() {
                       />
                     </div>
                     <div className="space-y-1">
-                      <h3 className="font-medium">{adminProfile.name}</h3>
+                      <h3 className="font-medium">{adminProfile?.firstName}</h3>
                       <p className="text-sm text-muted-foreground">
                         {adminProfile.role}
                       </p>

@@ -12,6 +12,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useAuthStore } from "@/zustandStore/login";
 
 // ─────────────────────────────────────────────────────────────
 // Types
@@ -44,11 +45,9 @@ export function AdminSidebar({
   onMobileClose,
   collapsed,
   onToggleCollapse,
-  profile,
 }: AdminSidebarProps) {
   const pathname = usePathname();
-  const initials = profile.name
-    .split(" ").map((n) => n[0]).join("").toUpperCase().slice(0, 2);
+  const profile = useAuthStore((a)=>a.user)
 
   return (
     <TooltipProvider delayDuration={100}>
@@ -150,8 +149,8 @@ export function AdminSidebar({
               </div>
             </TooltipTrigger>
             <TooltipContent side="right">
-              <p className="font-medium">{profile.name}</p>
-              <p className="text-xs text-muted-foreground">{profile.role}</p>
+              <p className="font-medium">{profile?.firstName}</p>
+              <p className="text-xs text-muted-foreground">{profile?.role}</p>
             </TooltipContent>
           </Tooltip>
 
@@ -161,8 +160,8 @@ export function AdminSidebar({
                    A
             </Avatar>
             <div className="flex-1 min-w-0">
-              <p className="font-medium text-sm truncate">{profile.name}</p>
-              <p className="text-xs text-primary-foreground/70 truncate">{profile.role}</p>
+              <p className="font-medium text-sm truncate">{profile?.firstName}</p>
+              <p className="text-xs text-primary-foreground/70 truncate">{profile?.role}</p>
             </div>
             <Button
               variant="ghost" size="icon"

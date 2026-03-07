@@ -22,9 +22,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
     getUserData()
   }, [])
+console.log(user?.role);
 
    useEffect(() => {
   if (!user || user.role === 'admin') return; // skip admins
+
 
     const socket = io(process.env.NEXT_PUBLIC_API_URL!); // your Node.js backend URL
     socket.emit('registerUser', user._id, 'user');
