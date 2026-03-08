@@ -1,5 +1,21 @@
+// app/(user)/notifications/page.tsx
+"use client";
 import NotificationsPage from "@/components/ui/notification";
+import { useNotifications } from "@/utility/notification";
+
 
 export default function Page() {
-  return <NotificationsPage role="admin" backHref="/admin" />;
+  const notif = useNotifications();
+  
+  return (
+    <NotificationsPage
+      role="admin"
+      backHref="/"
+      {...notif}
+      onMarkRead={notif.handleMarkRead}
+      onMarkAllRead={notif.handleMarkAllRead}
+      onClearAll={notif.handleClearAll}
+      onDelete={notif.handleDelete}
+    />
+  );
 }

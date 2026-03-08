@@ -21,9 +21,15 @@ export const ENDPOINTS = {
   ADMIN:
   {
     allUserData: '/api/auth/admin/users',
-    allUserOrderData: '/api/auth/admin/orders'
-    
-     
+    allUserOrderData: '/api/auth/admin/orders'  
+  },
+
+  NOTIFICATION: {
+    allNotification: "/api/auth/notification",
+    markOneRead: "/api/auth/notification/read-one",
+    markAllRead: "/api/auth/notification/read-all",
+    clearAll: "/api/auth/notification/clear-all",
+    deleteOne: "/api/auth/notification",
   }
   
 };

@@ -74,20 +74,14 @@ function StatsCards({ totalUsers ,activeUsers  , inActiveUser}: { totalUsers: nu
       icon: Clock,
       bg: "bg-amber-100",
       iconColor: "text-amber-600",
-      label: "Pending",
+      label: "inActive",
       value: inActiveUser,
     },
-    {
-      icon: Shield,
-      bg: "bg-blue-100",
-      iconColor: "text-blue-600",
-      label: "KYC Verified",
-      value: "—",
-    },
+   
   ];
 
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+    <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
       {cards.map(({ icon: Icon, bg, iconColor, label, value }) => (
         <Card key={label}>
           <CardContent className="p-4">
@@ -114,7 +108,6 @@ function StatsCards({ totalUsers ,activeUsers  , inActiveUser}: { totalUsers: nu
 // ─────────────────────────────────────────────────────────────
 export default function UsersPage() {
   const [currentPage, setCurrentPage] = useState(1);
-  const [statusFilter, setStatusFilter] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [users, setUsers] = useState<User[]>([]);
   const [totalPages, setTotalPages] = useState(1);
@@ -123,7 +116,6 @@ export default function UsersPage() {
   const [editingUser, setEditingUser] = useState<User | null>(null);
   const {activeUsersCount} = useAdmin()
   const inActiveUser = totalUsers-activeUsersCount 
-console.log("user is " , inActiveUser);
 
   // ── fetch ──────────────────────────────────────────────────
   const fetchUsers = useCallback(async () => {
@@ -132,7 +124,6 @@ console.log("user is " , inActiveUser);
       const params = new URLSearchParams({
         page: String(currentPage),
         limit: String(ITEMS_PER_PAGE),
-        ...(statusFilter !== "all" && { status: statusFilter }),
         ...(searchQuery && { search: searchQuery }),
       });
       const data = await getAllUsersData(params);
@@ -146,7 +137,7 @@ console.log("user is " , inActiveUser);
     } finally {
       setLoading(false);
     }
-  }, [currentPage, statusFilter, searchQuery]);
+  }, [currentPage, searchQuery]);
 
   // Debounce search
   useEffect(() => {
@@ -219,9 +210,7 @@ console.log("user is " , inActiveUser);
                 </p>
               </div>
             </div>
-            <Button className="gap-2 w-full sm:w-auto">
-              <UserPlus className="w-4 h-4" /> Add User
-            </Button>
+           
           </div>
 
           <StatsCards totalUsers={totalUsers} activeUsers={activeUsersCount}  inActiveUser={inActiveUser}/>
@@ -231,7 +220,6 @@ console.log("user is " , inActiveUser);
             loading={loading}
             totalUsers={totalUsers}
             currentPage={currentPage}
-            statusFilter={statusFilter}
             searchQuery={searchQuery}
             onStatusFilterChange={handleStatusFilterChange}
             onSearchChange={handleSearchChange}

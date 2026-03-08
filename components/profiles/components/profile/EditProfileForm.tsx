@@ -6,7 +6,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 
 type EditData = {
-  name: string;
+  firstName: string;
+  lastName: String;
   email: string;
   phone: string;
   username: string;
@@ -52,8 +53,8 @@ export default function EditProfileForm({
       <CardContent className="space-y-5">
         <div className={gridClass}>
           {[
-            { label: "Full Name", field: "name", type: "text" },
-            { label: "Username", field: "username", type: "text" },
+            { label: "First Name", field: "firstName", type: "text" },
+            { label: "Last Name", field: "lastName", type: "text" },
             { label: "Email Address", field: "email", type: "email" },
             { label: "Phone Number", field: "phone", type: "text" },
             { label: "State", field: "state", type: "text" },

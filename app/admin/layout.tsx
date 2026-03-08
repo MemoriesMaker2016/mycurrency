@@ -5,6 +5,7 @@ import { AdminProvider } from "@/app/contexts/admin-context";
 import { useAdmin } from "@/app/contexts/admin-context";
 import { AdminSidebar } from "@/components/ui/admin-siderbar";
 import { AdminHeader } from "@/components/ui/amin-header";
+import { Toaster } from "sonner";
 
 // ─────────────────────────────────────────────────────────────
 // Inner shell — needs useAdmin so must sit inside AdminProvider
@@ -28,7 +29,6 @@ function AdminShell({ children }: { children: React.ReactNode }) {
       <div className={`transition-all duration-300 ${collapsed ? "lg:ml-[68px]" : "lg:ml-64"}`}>
         <AdminHeader
           profile={profile}
-          notificationCount={12}
           onMenuOpen={() => setMobileOpen(true)}
         />
 
@@ -46,6 +46,7 @@ function AdminShell({ children }: { children: React.ReactNode }) {
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
     <AdminProvider>
+      <Toaster position="top-right" richColors />
       <AdminShell>{children}</AdminShell>
     </AdminProvider>
   );

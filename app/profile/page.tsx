@@ -7,9 +7,10 @@ import ProfileCard from "@/components/profiles/components/profile/ProfileCard";
 import ProfileHeader from "@/components/profiles/components/profile/ProfileHeader";
 import TransactionHistory from "@/components/profiles/components/profile/Transactionhistory";
 
-
 type ProfileData = {
-  name: string;
+  firstName: string;
+  lastName: string;
+
   email: string;
   phone: string;
   username: string;
@@ -18,27 +19,29 @@ type ProfileData = {
   state: string;
 };
 
-const defaultProfile: ProfileData = {
-  name: "",
-  email: "",
-  phone: "",
-  username: "",
-  address: "",
-  city: "",
-  state: "",
+type EditProfileData = {
+  firstName: "";
+  lastName: "";
+  email: "";
+  phone: "";
+  username: "";
+  address: "";
+  city: "";
+  state: "";
 };
 
 export default function UserProfile() {
   const [isEditing, setIsEditing] = useState(false);
-  const [profileData, setProfileData] = useState<ProfileData>(defaultProfile);
-  const [editData, setEditData] = useState<ProfileData>(defaultProfile);
+  const [profileData, setProfileData] = useState<ProfileData>([]);
+  const [editData, setEditData] = useState<EditProfileData>([]);
   // ── Fetch profile ──────────────────────────────────────────────────────────
   useEffect(() => {
     const fetchProfile = async () => {
       try {
         const userData = await getUsersDetails();
         const data: ProfileData = {
-          name: `${userData.firstName} ${userData.lastName}`,
+          firstName: `${userData.firstName}`,
+          lastName: userData.lastName,
           email: userData.email,
           phone: userData.phone,
           username: userData.username,
@@ -57,13 +60,16 @@ export default function UserProfile() {
   // ── Edit handlers ──────────────────────────────────────────────────────────
   const handleEdit = () => {
     setIsEditing(true);
-    setEditData(profileData);
+
+
+    setEditData({
+      ...profileData,
+    });
   };
 
   const handleSave = async () => {
-    const nameParts = editData.name.trim().split(" ");
-    const firstName = nameParts[0];
-    const lastName = nameParts.slice(1).join(" ") || "";
+    const firstName = editData.firstName;
+    const lastName = editData.lastName || "";
 
     try {
       const res = await updateUserDetails({

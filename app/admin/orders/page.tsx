@@ -212,7 +212,6 @@ export default function AllOrdersPage() {
   };
 
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-console.log(orders);
 
   return (
     <div>
@@ -230,14 +229,6 @@ console.log(orders);
               <h1 className="text-2xl sm:text-3xl font-bold">All Orders</h1>
               <p className="text-muted-foreground text-sm">View and manage all forex transactions</p>
             </div>
-          </div>
-          <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" className="bg-transparent">
-              <Download className="w-4 h-4 mr-2" /> Export CSV
-            </Button>
-            <Button variant="outline" size="icon" className="bg-transparent" onClick={fetchOrders}>
-              <RefreshCcw className="w-4 h-4" />
-            </Button>
           </div>
         </div>
 

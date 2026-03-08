@@ -38,7 +38,6 @@ interface UsersTableProps {
   totalUsers: number;
   currentPage: number;
   itemsPerPage: number;
-  statusFilter: string;
   searchQuery: string;
   onStatusFilterChange: (value: string) => void;
   onSearchChange: (value: string) => void;
@@ -87,8 +86,7 @@ function SkeletonRows({ cols = 7 }: { cols?: number }) {
 // ─────────────────────────────────────────────────────────────
 export function UsersTable({
   users, loading, totalUsers, currentPage, itemsPerPage,
-  statusFilter, searchQuery,
-  onStatusFilterChange, onSearchChange,
+  searchQuery, onSearchChange,
   onEdit, onDelete,
 }: UsersTableProps) {
   const { activeUserIds } = useAdmin(); // Get live active users from context
@@ -118,18 +116,6 @@ export function UsersTable({
               />
             </div>
 
-            <Select value={statusFilter} onValueChange={onStatusFilterChange}>
-              <SelectTrigger className="w-[130px]">
-                <Filter className="w-4 h-4 mr-2" />
-                <SelectValue placeholder="Status" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Status</SelectItem>
-                <SelectItem value="active">Active</SelectItem>
-                <SelectItem value="inactive">Inactive</SelectItem>
-                <SelectItem value="pending">Pending</SelectItem>
-              </SelectContent>
-            </Select>
           </div>
         </div>
       </CardHeader>

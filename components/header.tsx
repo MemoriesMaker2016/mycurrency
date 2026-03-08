@@ -22,15 +22,16 @@ import {
 import Image from "next/image";
 import { useAuthStore } from "@/zustandStore/login";
 import { useRouter } from "next/navigation";
+import { useNotificationCount } from "@/zustandStore/notificationCount";
 
-export default function Header() {
+export function Header() {
+  const count = useNotificationCount((s) => s.count);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [open, setOpen] = useState(false);
 
   const user = useAuthStore((s) => s.user);
   const logout = useAuthStore((s) => s.logout);
   const isAuthenticated = !!user;
-  console.log(user);
 
   const router = useRouter();
   const ref = useRef<HTMLDivElement | null>(null);
@@ -41,7 +42,6 @@ export default function Header() {
         setOpen(false);
       }
     };
-
     document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
   }, []);
@@ -67,20 +67,12 @@ export default function Header() {
               <Phone className="h-3 w-3" />
               <span>+91 99912 25544</span>
             </a>
-            <span className="hidden md:inline text-primary-foreground/70">
-              |
-            </span>
-            <span className="hidden md:inline">
-              Mon - Sat: 9:00 AM - 7:00 PM
-            </span>
+            <span className="hidden md:inline text-primary-foreground/70">|</span>
+            <span className="hidden md:inline">Mon - Sat: 9:00 AM - 7:00 PM</span>
           </div>
           <div className="flex items-center gap-3">
             <Link href="/track-orders" className="hover:underline">
               Track Order
-            </Link>
-            <span className="text-primary-foreground/70">|</span>
-            <Link href="#" className="hover:underline">
-              Support
             </Link>
           </div>
         </div>
@@ -89,6 +81,7 @@ export default function Header() {
       {/* Main Nav */}
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
+
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3">
             <Image
@@ -105,29 +98,20 @@ export default function Header() {
           <nav className="hidden lg:flex items-center gap-1">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button
-                  variant="ghost"
-                  className="flex items-center gap-1 text-sm cursor-pointer"
-                >
+                <Button variant="ghost" className="flex items-center gap-1 text-sm cursor-pointer">
                   Exchange Currency
                   <ChevronDown className="h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="start" className="w-48">
                 <DropdownMenuItem asChild>
-                  <Link
-                    href="/exchange"
-                    className="flex items-center gap-2 cursor-pointer"
-                  >
+                  <Link href="/exchange" className="flex items-center gap-2 cursor-pointer">
                     <CreditCard className="h-4 w-4" />
                     Buy Foreign Currency
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link
-                    href="/exchange?type=sell"
-                    className="flex items-center gap-2 cursor-pointer"
-                  >
+                  <Link href="/exchange?type=sell" className="flex items-center gap-2 cursor-pointer">
                     <CreditCard className="h-4 w-4" />
                     Sell Foreign Currency
                   </Link>
@@ -136,190 +120,151 @@ export default function Header() {
             </DropdownMenu>
 
             <Link href="/transfer">
-              <Button
-                variant="ghost"
-                className="flex items-center gap-1 cursor-pointer"
-              >
+              <Button variant="ghost" className="flex items-center gap-1 cursor-pointer">
                 <Send className="h-4 w-4" />
                 Money Transfer
               </Button>
             </Link>
-
             <Link href="/rates">
-              <Button variant="ghost" className="cursor-pointer">
-                Live Rates
-              </Button>
+              <Button variant="ghost" className="cursor-pointer">Live Rates</Button>
             </Link>
             <Link href="/about">
-              <Button variant="ghost" className="cursor-pointer">
-                About Us
-              </Button>
+              <Button variant="ghost" className="cursor-pointer">About Us</Button>
             </Link>
             <Link href="/contact">
-              <Button variant="ghost" className="cursor-pointer">
-                Contact
-              </Button>
+              <Button variant="ghost" className="cursor-pointer">Contact</Button>
             </Link>
           </nav>
 
-          {/* CTA Buttons */}
-          {isAuthenticated ? (
-            <div ref={ref} className="hidden lg:flex items-center relative">
-              <button
-                onClick={() => setOpen((prev) => !prev)}
-                className="flex items-center gap-2 font-medium"
-              >
-                <div className="w-8 h-8 rounded-full bg-accent text-white flex items-center justify-center">
-                  {user?.firstName ? (
-                    user?.firstName.slice(0, 1)
-                  ) : (
-                    <User size={16} />
-                  )}
-                </div>
-                <span className="hidden lg:block">{user?.firstName}</span>
-              </button>
+          {/* Right side — desktop */}
+          <div className="flex items-center gap-2">
 
-              <Link href={"/notifications"}>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="relative"
-                  aria-label="Notifications"
-                >
+            {/* Notification Bell — always visible when authenticated */}
+            {isAuthenticated && (
+              <Link href="/notifications">
+                <Button variant="ghost" size="icon" className="relative" aria-label="Notifications">
                   <Bell className="w-5 h-5" />
-
-                  <span className="absolute -top-1 -right-1 min-w-[20px] h-5 px-1 bg-destructive text-destructive-foreground text-xs rounded-full flex items-center justify-center">
-                    10
-                  </span>
+                  {count >=0 && (
+                    <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 bg-destructive text-destructive-foreground text-[10px] font-semibold rounded-full flex items-center justify-center leading-none">
+                      {count > 99 ? "99+" : count}
+                    </span>
+                  )}
                 </Button>
               </Link>
-
-              {open && (
-                <div className="absolute right-0 mt-2 w-40 bg-white border shadow-lg rounded-md z-50">
-                  <Link
-                    href={profileRoute}
-                    className="block px-4 py-2 hover:bg-gray-100"
-                    onClick={() => setOpen(false)}
-                  >
-                    My Profile
-                  </Link>
-
-                  <button
-                    onClick={handleLogout}
-                    className="w-full text-left px-4 py-2 hover:bg-gray-100 text-red-600"
-                  >
-                    Logout
-                  </button>
-                </div>
-              )}
-            </div>
-          ) : (
-            <div className="hidden lg:flex items-center gap-3">
-              <Link href="/login">
-                <Button variant="outline" size="sm" className="cursor-pointer">
-                  Login
-                </Button>
-              </Link>
-              <Link href="/register">
-                <Button
-                  size="sm"
-                  className="bg-accent text-accent-foreground hover:bg-accent/90 cursor-pointer"
-                >
-                  Sign Up
-                </Button>
-              </Link>
-            </div>
-          )}
-
-          {/* Mobile Menu Button */}
-          <Button
-            variant="ghost"
-            size="icon"
-            className="lg:hidden"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          >
-            {mobileMenuOpen ? (
-              <X className="h-6 w-6" />
-            ) : (
-              <Menu className="h-6 w-6" />
             )}
-          </Button>
+
+            {/* Profile dropdown — desktop only */}
+            {isAuthenticated ? (
+              <div ref={ref} className="hidden lg:flex items-center relative">
+                <button
+                  onClick={() => setOpen((prev) => !prev)}
+                  className="flex items-center gap-2 px-2 py-1.5 rounded-md hover:bg-secondary transition-colors"
+                >
+                  <div className="w-8 h-8 rounded-full bg-accent text-white flex items-center justify-center text-sm font-semibold shrink-0">
+                    {user?.firstName ? user.firstName.slice(0, 1).toUpperCase() : <User size={15} />}
+                  </div>
+                  <span className="text-sm font-medium max-w-[100px] truncate">
+                    {user?.firstName}
+                  </span>
+                  <ChevronDown className={`w-4 h-4 text-muted-foreground transition-transform duration-200 ${open ? "rotate-180" : ""}`} />
+                </button>
+
+                {open && (
+                  <div className="absolute top-full right-0 mt-2 w-44 bg-card border border-border shadow-lg rounded-lg z-50 overflow-hidden">
+                    <Link
+                      href={profileRoute}
+                      className="flex items-center gap-2 px-4 py-2.5 text-sm hover:bg-secondary transition-colors"
+                      onClick={() => setOpen(false)}
+                    >
+                      <User className="w-4 h-4 text-muted-foreground" />
+                      My Profile
+                    </Link>
+                    <div className="border-t border-border" />
+                    <button
+                      onClick={handleLogout}
+                      className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-destructive hover:bg-destructive/10 transition-colors"
+                    >
+                      <X className="w-4 h-4" />
+                      Logout
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="hidden lg:flex items-center gap-2">
+                <Link href="/login">
+                  <Button variant="outline" size="sm" className="cursor-pointer">Login</Button>
+                </Link>
+                <Link href="/register">
+                  <Button size="sm" className="bg-accent text-accent-foreground hover:bg-accent/90 cursor-pointer">
+                    Sign Up
+                  </Button>
+                </Link>
+              </div>
+            )}
+
+            {/* Mobile hamburger */}
+            <Button
+              variant="ghost"
+              size="icon"
+              className="lg:hidden"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            >
+              {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            </Button>
+          </div>
         </div>
 
         {/* Mobile Navigation */}
         {mobileMenuOpen && (
           <div className="lg:hidden py-4 border-t border-border">
-            <nav className="flex flex-col gap-2">
-              <Link
-                href="/exchange"
-                className="px-4 py-2 hover:bg-secondary rounded-md"
-              >
+            <nav className="flex flex-col gap-1">
+              <Link href="/exchange" className="px-4 py-2.5 hover:bg-secondary rounded-md text-sm" onClick={() => setMobileMenuOpen(false)}>
                 Buy Currency
               </Link>
-              <Link
-                href="/exchange?type=sell"
-                className="px-4 py-2 hover:bg-secondary rounded-md"
-              >
+              <Link href="/exchange?type=sell" className="px-4 py-2.5 hover:bg-secondary rounded-md text-sm" onClick={() => setMobileMenuOpen(false)}>
                 Sell Currency
               </Link>
-              <Link
-                href="/transfer"
-                className="px-4 py-2 hover:bg-secondary rounded-md"
-              >
+              <Link href="/transfer" className="px-4 py-2.5 hover:bg-secondary rounded-md text-sm" onClick={() => setMobileMenuOpen(false)}>
                 Money Transfer
               </Link>
-              <Link
-                href="/rates"
-                className="px-4 py-2 hover:bg-secondary rounded-md"
-              >
+              <Link href="/rates" className="px-4 py-2.5 hover:bg-secondary rounded-md text-sm" onClick={() => setMobileMenuOpen(false)}>
                 Live Rates
               </Link>
-              <Link
-                href="/about"
-                className="px-4 py-2 hover:bg-secondary rounded-md"
-              >
+              <Link href="/about" className="px-4 py-2.5 hover:bg-secondary rounded-md text-sm" onClick={() => setMobileMenuOpen(false)}>
                 About Us
               </Link>
-              <Link
-                href="/contact"
-                className="px-4 py-2 hover:bg-secondary rounded-md"
-              >
+              <Link href="/contact" className="px-4 py-2.5 hover:bg-secondary rounded-md text-sm" onClick={() => setMobileMenuOpen(false)}>
                 Contact
               </Link>
+
+              <div className="border-t border-border my-2" />
 
               {isAuthenticated ? (
                 <>
                   <Link
                     href={profileRoute}
-                    className="px-4 py-2 hover:bg-secondary rounded-md"
+                    className="flex items-center gap-2 px-4 py-2.5 hover:bg-secondary rounded-md text-sm"
+                    onClick={() => setMobileMenuOpen(false)}
                   >
+                    <User className="w-4 h-4 text-muted-foreground" />
                     My Profile
                   </Link>
                   <button
-                    onClick={handleLogout}
-                    className="text-left px-4 py-2 text-red-600 hover:bg-secondary rounded-md"
+                    onClick={() => { handleLogout(); setMobileMenuOpen(false); }}
+                    className="flex items-center gap-2 text-left px-4 py-2.5 text-sm text-destructive hover:bg-destructive/10 rounded-md"
                   >
+                    <X className="w-4 h-4" />
                     Logout
                   </button>
                 </>
               ) : (
-                <div className="flex gap-2 px-4 pt-2">
-                  <Link href="/login">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="flex-1 bg-transparent"
-                    >
-                      Login
-                    </Button>
+                <div className="flex gap-2 px-4 pt-1">
+                  <Link href="/login" className="flex-1">
+                    <Button variant="outline" size="sm" className="w-full bg-transparent">Login</Button>
                   </Link>
-                  <Link href="/register">
-                    <Button
-                      size="sm"
-                      className="flex-1 bg-accent text-accent-foreground"
-                    >
-                      Sign Up
-                    </Button>
+                  <Link href="/register" className="flex-1">
+                    <Button size="sm" className="w-full bg-accent text-accent-foreground">Sign Up</Button>
                   </Link>
                 </div>
               )}

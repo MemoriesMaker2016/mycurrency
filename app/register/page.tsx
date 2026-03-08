@@ -1,29 +1,29 @@
-'use client';
+"use client";
 
-import type React from 'react';
-import { MapPin, Building } from 'lucide-react';
-import { indianStates, stateList } from '@/lib/india-cities';
+import type React from "react";
+import { MapPin, Building } from "lucide-react";
+import { indianStates, stateList } from "@/lib/india-cities";
 
-import { useState } from 'react';
-import Link from 'next/link';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { useState } from "react";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { Checkbox } from '@/components/ui/checkbox';
+} from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from "@/components/ui/select";
 import {
   TrendingUp,
   Eye,
@@ -35,64 +35,66 @@ import {
   ArrowRight,
   CheckCircle2,
   Globe,
-} from 'lucide-react';
-import Image from 'next/image';
-import { POST } from '@/apiFasad/httpMethod/method';
+} from "lucide-react";
+import Image from "next/image";
+import { POST } from "@/apiFasad/httpMethod/method";
 import { useRouter } from "next/navigation";
-import { registerUser } from '@/apiFasad/authApiCall';
+import { registerUser } from "@/apiFasad/authApiCall";
+import { useAuthStore } from "@/zustandStore/login";
 
 export default function RegisterPage() {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const setUser = useAuthStore((s) => s.setUser);
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    password: '',
-    confirmPassword: '',
-    country: '',
-    state: '',
-    city: '',
-    address: '',
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    password: "",
+    confirmPassword: "",
+    country: "",
+    state: "",
+    city: "",
+    address: "",
     agreeTerms: false,
     agreeMarketing: false,
   });
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
 
-const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
+    // Check if passwords match
+    if (formData.password !== formData.confirmPassword) {
+      alert("Passwords do not match");
+      return;
+    }
 
-  // Check if passwords match
-  if (formData.password !== formData.confirmPassword) {
-    alert('Passwords do not match');
-    return;
-  }
+    try {
+      const payload = {
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        phone: formData.phone,
+        password: formData.password,
+        country: formData.country,
+        state: formData.state,
+        city: formData.city,
+        address: formData.address,
+        agreeTerms: formData.agreeTerms,
+        agreeMarketing: formData.agreeMarketing,
+      };
 
-  try {
-    const payload = {
-      firstName: formData.firstName,
-      lastName: formData.lastName,
-      email: formData.email,
-      phone: formData.phone,
-      password: formData.password,
-      country: formData.country,
-      state: formData.state,
-      city: formData.city,
-      address: formData.address,
-      agreeTerms: formData.agreeTerms,
-      agreeMarketing: formData.agreeMarketing,
-    };
-
-    // Use your POST helper
-    const data = await registerUser(payload)
-    router.push('/');
-  } catch (error: any) {
-    console.error('Network error:', error);
-    alert(error?.message || 'Something went wrong. Please try again later.');
-  }
-};
+      // Use your POST helper
+      const data = await registerUser(payload);
+      setUser(data?.user);
+      router.push("/");
+    } catch (error: any) {
+      console.error("Network error:", error);
+      alert(error?.message || "Something went wrong. Please try again later.");
+    }
+  };
 
   const passwordStrength = (password: string) => {
     let strength = 0;
@@ -105,13 +107,13 @@ const handleSubmit = async (e: React.FormEvent) => {
   };
 
   const strength = passwordStrength(formData.password);
-  const strengthText = ['Very Weak', 'Weak', 'Fair', 'Good', 'Strong'];
+  const strengthText = ["Very Weak", "Weak", "Fair", "Good", "Strong"];
   const strengthColor = [
-    'bg-destructive',
-    'bg-orange-500',
-    'bg-yellow-500',
-    'bg-green-400',
-    'bg-green-600',
+    "bg-destructive",
+    "bg-orange-500",
+    "bg-yellow-500",
+    "bg-green-400",
+    "bg-green-600",
   ];
 
   // Get available cities for selected state
@@ -262,7 +264,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                 </div>
 
                 {/* State Field */}
-                {formData.country === 'in' && (
+                {formData.country === "in" && (
                   <>
                     <div className="space-y-2">
                       <Label htmlFor="state" className="text-sm font-medium">
@@ -273,7 +275,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                         <Select
                           value={formData.state}
                           onValueChange={(value) =>
-                            setFormData({ ...formData, state: value, city: '' })
+                            setFormData({ ...formData, state: value, city: "" })
                           }
                         >
                           <SelectTrigger className="pl-10 h-11">
@@ -352,7 +354,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                     <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                     <Input
                       id="password"
-                      type={showPassword ? 'text' : 'password'}
+                      type={showPassword ? "text" : "password"}
                       placeholder="Create a strong password"
                       value={formData.password}
                       onChange={(e) =>
@@ -383,15 +385,15 @@ const handleSubmit = async (e: React.FormEvent) => {
                             className={`h-1.5 flex-1 rounded-full transition-all duration-300 ${
                               i < strength
                                 ? strengthColor[strength - 1]
-                                : 'bg-muted'
+                                : "bg-muted"
                             }`}
                           />
                         ))}
                       </div>
                       <p className="text-xs text-muted-foreground">
-                        Password strength:{' '}
+                        Password strength:{" "}
                         <span className="font-medium">
-                          {strengthText[strength - 1] || 'Too short'}
+                          {strengthText[strength - 1] || "Too short"}
                         </span>
                       </p>
                     </div>
@@ -410,7 +412,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                     <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                     <Input
                       id="confirmPassword"
-                      type={showConfirmPassword ? 'text' : 'password'}
+                      type={showConfirmPassword ? "text" : "password"}
                       placeholder="Confirm your password"
                       value={formData.confirmPassword}
                       onChange={(e) =>
@@ -462,14 +464,14 @@ const handleSubmit = async (e: React.FormEvent) => {
                       htmlFor="terms"
                       className="text-sm text-muted-foreground cursor-pointer leading-relaxed"
                     >
-                      I agree to the{' '}
+                      I agree to the{" "}
                       <Link
                         href="/terms"
                         className="text-primary hover:underline"
                       >
                         Terms of Service
-                      </Link>{' '}
-                      and{' '}
+                      </Link>{" "}
+                      and{" "}
                       <Link
                         href="/privacy"
                         className="text-primary hover:underline"
@@ -512,9 +514,8 @@ const handleSubmit = async (e: React.FormEvent) => {
                   <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                 </Button>
 
-
                 <p className="text-center text-sm text-muted-foreground pt-4">
-                  Already have an account?{' '}
+                  Already have an account?{" "}
                   <Link
                     href="/login"
                     className="text-primary font-semibold hover:text-primary/80 transition-colors"
@@ -563,11 +564,11 @@ const handleSubmit = async (e: React.FormEvent) => {
           {/* Benefits */}
           <div className="space-y-5">
             {[
-              'Best exchange rates guaranteed',
-              'Zero hidden charges or fees',
-              'Doorstep delivery across India',
-              '24/7 customer support',
-              'Secure & RBI authorized',
+              "Best exchange rates guaranteed",
+              "Zero hidden charges or fees",
+              "Doorstep delivery across India",
+              "24/7 customer support",
+              "Secure & RBI authorized",
             ].map((benefit, index) => (
               <div key={index} className="flex items-center gap-3 group">
                 <div className="w-8 h-8 bg-primary-foreground/10 backdrop-blur-sm rounded-full flex items-center justify-center group-hover:bg-primary-foreground/20 transition-colors">

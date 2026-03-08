@@ -1,18 +1,12 @@
 "use client";
 
-import Link from "next/link";
-import { ArrowLeft, Bell } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { useNotificationCount } from "@/zustandStore/notificationCount";
+import { ArrowLeft, Bell } from "lucide-react";
+import Link from "next/link";
 
 export default function ProfileHeader() {
+  const count = useNotificationCount((s) => s.count);
   return (
     <header className="sticky top-0 z-40 bg-card border-b border-border">
       <div className="max-w-400 mx-auto px-4 flex items-center justify-between py-4">
@@ -30,18 +24,23 @@ export default function ProfileHeader() {
             </p>
           </div>
         </div>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon">
-              <Bell className="w-5 h-5" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Notifications</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>No new notifications</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+
+        <Link href={"/notifications"}>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="relative"
+            aria-label="Notifications"
+          >
+            <Bell className="w-5 h-5" />
+
+            {count >= 0 && (
+              <span className="absolute -top-1 -right-1 min-w-[20px] h-5 px-1 bg-destructive text-destructive-foreground text-xs rounded-full flex items-center justify-center">
+                {count > 99 ? "99+" : count}
+              </span>
+            )}
+          </Button>
+        </Link>
       </div>
     </header>
   );

@@ -42,9 +42,24 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/admin', request.url))
   }
 
+
+
+
+  if (pathname.startsWith('/notifications')) {
+    if (role === 'admin' && !pathname.startsWith('/admin')) {
+      return NextResponse.redirect(new URL('/admin/notifications', request.url))
+    }
+
+    if (role === 'user' && pathname.startsWith('/admin')) {
+      return NextResponse.redirect(new URL('/notifications', request.url))
+    }
+  }
+
+
+
   return NextResponse.next()
 }
 
 export const config = {
-  matcher: ['/profile/:path*', '/admin/:path*', '/login']
+  matcher: ['/profile/:path*', '/admin/:path*', '/login' , '/notifications']
 }

@@ -5,8 +5,8 @@ import { HeroSection } from '@/components/hero-section';
 import { ServicesSection } from '@/components/services-section';
 import TestimonialSection from '@/components/testimonials-section';
 import { CTASection } from '@/components/cta-section';
-import { AuthProvider } from '@/components/AuthProvider';
 import { ForexCardSection } from '@/components/forexCardSection';
+import SupportChatbot from '@/components/ui/chatbot';
 
 export default function HomePage() {
   return (
@@ -22,6 +22,7 @@ export default function HomePage() {
           <CTASection />
         </main>
         <Footer />
+        <SupportChatbot/>
       </div>
   );
 }

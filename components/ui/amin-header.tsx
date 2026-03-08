@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { Bell, LogOut, Menu, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,13 +13,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useAuthStore } from "@/zustandStore/login";
+import { useNotificationCount } from "@/zustandStore/notificationCount";
 
 // ─────────────────────────────────────────────────────────────
 // Types
 // ─────────────────────────────────────────────────────────────
 interface AdminHeaderProps {
   profile: { name: string; avatar?: string };
-  notificationCount?: number;
   onMenuOpen: () => void;
   onLogout?: () => void;
 }
@@ -28,13 +28,11 @@ interface AdminHeaderProps {
 // Component
 // ─────────────────────────────────────────────────────────────
 export function AdminHeader({
-  notificationCount = 0,
   onMenuOpen,
   onLogout,
 }: AdminHeaderProps) {
   const profile = useAuthStore((a) => a.user);
-console.log(profile);
-
+const count = useNotificationCount((s) => s.count);
   return (
     <header className="sticky top-0 z-30 bg-card/80 backdrop-blur-md border-b border-border">
       <div className="flex items-center justify-between px-4 py-3">
@@ -60,9 +58,9 @@ console.log(profile);
               aria-label="Notifications"
             >
               <Bell className="w-5 h-5" />
-              {notificationCount > 0 && (
+              {count >=0 && (
                 <span className="absolute -top-1 -right-1 min-w-[20px] h-5 px-1 bg-destructive text-destructive-foreground text-xs rounded-full flex items-center justify-center">
-                  {notificationCount > 99 ? "99+" : notificationCount}
+                  {count > 99 ? "99+" : count}
                 </span>
               )}
             </Button>

@@ -12,7 +12,8 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 type ProfileData = {
-  name: string;
+  firstName:string;
+  lastName:String;
   email: string;
   phone: string;
   username: string;
@@ -28,18 +29,19 @@ type Props = {
 };
 
 export default function ProfileCard({ profileData, isEditing, onEdit }: Props) {
+  console.log(profileData);
+  
   return (
     <Card className="sticky top-24">
       <CardHeader className="text-center pb-4">
         <Avatar className="w-24 h-24 mx-auto mb-4">
           <AvatarImage
             src="https://avatar.vercel.sh/rajesh"
-            alt={profileData.name}
+            alt={profileData.firstName}
           />
           <AvatarFallback>RK</AvatarFallback>
         </Avatar>
-        <CardTitle className="text-xl">{profileData.name}</CardTitle>
-        <CardDescription>@{profileData.username}</CardDescription>
+        <CardTitle className="text-xl">{profileData.firstName} {profileData.lastName}</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="space-y-3 text-sm">

@@ -98,14 +98,22 @@ export default function TransactionHistory() {
 
       <Card>
         <CardHeader>
+          <div className=" flex justify-between">
+          <div>
+
           <CardTitle className="flex items-center gap-2">
             <History className="w-5 h-5" />
             Transaction History
           </CardTitle>
+          
           <CardDescription>Your recent currency conversions</CardDescription>
+          </div>
+          
           <Button onClick={() => setIsFilterOpen(true)} className="mb-4">
             Filter Orders
           </Button>
+        </div>
+          
         </CardHeader>
         <CardContent>
           <div className="space-y-3">

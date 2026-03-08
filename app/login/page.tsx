@@ -42,11 +42,6 @@ export default function LoginPage() {
     const payoad =  { email, password } 
     try {
       const res = await loginUser(payoad)
-     console.log(res);
-     
-     if (!res?.ok) {
-        alert(res.message || 'Login failed');
-      }
       setUser(res?.user)
       router.push('/');
     } catch (error) {
