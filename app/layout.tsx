@@ -1,11 +1,11 @@
-import type React from "react";
-import type { Metadata } from "next";
-import { Inter, Geist_Mono } from "next/font/google";
-import { Analytics } from "@vercel/analytics/next";
-import { ScrollToTop } from "@/components/scroll-to-top";
-import "./globals.css";
 import { AuthProvider } from "@/components/AuthProvider";
+import { ScrollToTop } from "@/components/scroll-to-top";
+import { Analytics } from "@vercel/analytics/next";
+import type { Metadata } from "next";
+import { Geist_Mono, Inter } from "next/font/google";
+import type React from "react";
 import { Toaster } from "sonner";
+import "./globals.css";
 
 const _inter = Inter({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
@@ -26,6 +26,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
   return (
     <html lang="en">
       <body className={`font-sans antialiased`}>

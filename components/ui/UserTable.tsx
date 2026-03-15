@@ -51,7 +51,11 @@ interface UsersTableProps {
 function RoleBadge({ role }: { role: string }) {
   if (role === "admin")
     return <Badge className="bg-blue-100 text-blue-700 hover:bg-blue-100">Admin</Badge>;
+  if(role=='user')
   return <Badge className="bg-emerald-100 text-emerald-700 hover:bg-emerald-100">User</Badge>;
+  if(role=='subadmin')
+    return <Badge className="bg-emerald-100 text-emerald-700 hover:bg-emerald-100">SubAdmin</Badge>;
+
 }
 
 function StatusDot({ isActive }: { isActive: boolean }) {
@@ -167,8 +171,8 @@ export function UsersTable({
                     <TableCell>
                       <StatusDot isActive={activeUserIds.includes(user._id)} />
                     </TableCell>
-
-                    <TableCell><RoleBadge role={user.role} /></TableCell>
+                    
+                    <TableCell><RoleBadge role={user?.role} /></TableCell>
 
                     <TableCell className="hidden sm:table-cell text-sm text-muted-foreground">
                       {new Date(user.createdAt).toLocaleDateString("en-IN", {

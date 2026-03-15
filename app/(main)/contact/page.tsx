@@ -3,9 +3,6 @@
 import type React from 'react';
 
 import { useState } from 'react';
-import Header from '@/components/header';
-import Footer from '@/components/footer';
-import { RateTicker } from '@/components/rate-ticker';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -122,8 +119,6 @@ export default function ContactPage() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Header />
-      <RateTicker />
       <main className="flex-1">
         {/* Hero Section */}
         <section className="bg-primary text-primary-foreground py-16 md:py-24">
@@ -422,7 +417,6 @@ export default function ContactPage() {
           </div>
         </section>
       </main>
-      <Footer />
     </div>
   );
 }

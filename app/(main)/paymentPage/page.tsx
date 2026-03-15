@@ -36,8 +36,6 @@ export default function PaymentPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
-      {/* Header */}
-      <Header />
 
       <main className="flex-1 px-4 sm:px-6 lg:px-8 py-10">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -182,11 +180,6 @@ export default function PaymentPage() {
           </div>
         </div>
       </main>
-
-      {/* Footer */}
-      <footer className="bg-white border-t py-6 text-center text-sm text-gray-600">
-        © 2026 · Secure Payments
-      </footer>
     </div>
   );
 }

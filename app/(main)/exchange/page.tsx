@@ -1,9 +1,6 @@
-import { Header } from "@/components/header"
-import { Footer } from "@/components/footer"
-import { RateTicker } from "@/components/rate-ticker"
 import { ExchangeCalculator } from "@/components/exchange-calculator"
 import { Card, CardContent } from "@/components/ui/card"
-import { Truck, Shield, Clock, BadgeCheck, MapPin } from "lucide-react"
+import { BadgeCheck, Clock, MapPin, Shield, Truck } from "lucide-react"
 
 const features = [
   {
@@ -54,8 +51,7 @@ const steps = [
 export default function ExchangePage() {
   return (
     <div className="min-h-screen flex flex-col">
-      <Header />
-      <RateTicker />
+
       <main className="flex-1">
         {/* Hero Section */}
         <section className="bg-gradient-to-br from-primary/5 via-background to-accent/5 py-12 md:py-16">
@@ -160,7 +156,6 @@ export default function ExchangePage() {
           </div>
         </section>
       </main>
-      <Footer />
     </div>
   )
 }

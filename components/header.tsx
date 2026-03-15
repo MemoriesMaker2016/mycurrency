@@ -24,7 +24,7 @@ import { useAuthStore } from "@/zustandStore/login";
 import { useRouter } from "next/navigation";
 import { useNotificationCount } from "@/zustandStore/notificationCount";
 
-export function Header() {
+export default function Header() {
   const count = useNotificationCount((s) => s.count);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [open, setOpen] = useState(false);

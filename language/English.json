@@ -1,0 +1,195 @@
+{
+    "Header": {
+        "ContactHeader": {
+            "Number": "+91 99912 25544",
+            "Week": "Mon-Sat:",
+            "time": "9:00 AM - 7:00 PM",
+            "oredr": "Track Order",
+            "Support": "Support"
+        },
+        "NavBar": {
+            "exchangeCurrency": "Exchange Currency",
+            "moneyTransfer": "Money Transfer",
+            "liveRates": "Live Rates",
+            "aboutUs": "About Us",
+            "contact": "Contact",
+            "login": "Login",
+            "signUp": "Sign Up"
+        }
+    },
+    "HomePage": {
+        "aboutHomepage": {
+            "hero": {
+                "cashback": "Up to 2% Cashback on All Orders",
+                "title": "Best Rates for Foreign Exchange",
+                "description": "Buy & sell foreign currency online at the best exchange rates. Same-day doorstep delivery in 65+ cities across India. RBI authorized and 100% secure."
+            },
+            "stats": {
+                "customers": {
+                    "value": "10K+",
+                    "label": "Happy Customers"
+                },
+                "rating": {
+                    "value": "4.8",
+                    "label": "Rating"
+                },
+                "secure": {
+                    "value": "100%",
+                    "label": "Secure"
+                },
+                "support": {
+                    "value": "24/7",
+                    "label": "Support"
+                }
+            },
+            "security": {
+                "rbi": "RBI Authorized Dealer",
+                "encryption": "256-bit Encryption"
+            }
+        },
+        "currencyConverter": {
+            "buyForex": {
+                "title": "Buy Forex",
+                "tabs": {
+                    "currencyNotes": "Currency Notes",
+                    "forexCard": "Forex Card"
+                },
+                "pay": "You Pay (INR)",
+                "rate": "Rate",
+                "youGet": "You Get",
+                "saveMessage": "Save up to ₹1.84 compared to banks!",
+                "bookOrder": "Book This Order",
+                "footer": {
+                    "liveRates": "Live Rates",
+                    "rbiAuthorized": "RBI Authorized",
+                    "securePayments": "Secure Payments"
+                }
+            }
+        }
+    },
+    "AboutWebSiteSection": {
+        "AboutTitle": {
+            "title": "Your Complete Forex Solution",
+            "description": "From currency exchange to international transfers, we've got all your foreign exchange needs covered."
+        },
+        "CurrencyExchange": {
+            "services": {
+                "currencyExchange": {
+                    "title": "Currency Exchange",
+                    "description": "Buy and sell foreign currency notes at the best exchange rates. Same-day doorstep delivery available.",
+                    "tags": [
+                        "40+ Currencies",
+                        "Doorstep Delivery",
+                        "Best Rates"
+                    ],
+                    "button": "Learn More"
+                },
+                "moneyTransfer": {
+                    "title": "Money Transfer",
+                    "description": "Send money abroad quickly and securely. Wire transfers to 100+ countries with competitive rates.",
+                    "tags": [
+                        "100+ Countries",
+                        "Same Day Transfer",
+                        "Zero Hidden Fees"
+                    ],
+                    "button": "Learn More"
+                },
+                "forexCards": {
+                    "title": "Forex Cards",
+                    "description": "Multi-currency travel cards with zero markup rates. Perfect for international travel and online shopping.",
+                    "tags": [
+                        "Zero Markup",
+                        "Multiple Currencies",
+                        "Instant Reload"
+                    ],
+                    "button": "Learn More"
+                }
+            },
+            "trustFeatures": {
+                "rbiAuthorized": {
+                    "title": "RBI Authorized",
+                    "description": "Licensed forex dealer with full regulatory compliance"
+                },
+                "sameDayDelivery": {
+                    "title": "Same Day Delivery",
+                    "description": "Get your forex delivered within hours in 65+ cities"
+                },
+                "bestRateGuarantee": {
+                    "title": "Best Rate Guarantee",
+                    "description": "We match any better rate you find elsewhere"
+                }
+            }
+        }
+    },
+    "TrustedSection": {
+        "testimonials": {
+            "title": "Trusted by Thousands",
+            "subtitle": "See what our customers have to say about their experience with ForexHub.",
+            "reviews": [
+                {
+                    "message": "ForexHub has been my go-to for currency exchange. Their rates are consistently better than banks, and the doorstep delivery is super convenient.",
+                    "name": "Priya Sharma",
+                    "role": "Frequent Traveler"
+                },
+                {
+                    "message": "I regularly send money abroad for my import business. ForexHub's money transfer service is fast, reliable, and their customer support is excellent.",
+                    "name": "Rahul Mehta",
+                    "role": "Business Owner"
+                },
+                {
+                    "message": "Sending money to my son studying abroad was so easy with ForexHub. The rates are transparent and the process is completely digital.",
+                    "name": "Anita Desai",
+                    "role": "Student Parent"
+                }
+            ]
+        }
+    },
+    "footer": {
+        "cta": {
+            "title": "Ready to Get the Best Exchange Rates?",
+            "subtitle": "Join over 500,000 happy customers who trust ForexHub for their foreign exchange needs.",
+            "bookOrder": "Book Your Order",
+            "callNow": "Call Us Now",
+            "whatsappText": "Or chat with our experts via WhatsApp +91 98765 43210"
+        },
+        "footer": {
+            "about": {
+                "description": "India's leading online forex marketplace. Buy & sell foreign currency at the best rates with doorstep delivery."
+            },
+            "services": {
+                "title": "Services",
+                "items": [
+                    "Buy Foreign Currency",
+                    "Sell Foreign Currency",
+                    "Money Transfer",
+                    "Forex Cards",
+                    "Travel Insurance"
+                ]
+            },
+            "quickLinks": {
+                "title": "Quick Links",
+                "items": [
+                    "Live Rates",
+                    "Rate Alerts",
+                    "Track Order",
+                    "FAQs",
+                    "Blog"
+                ]
+            },
+            "contact": {
+                "title": "Contact Us",
+                "phone": "+91 99912 25544",
+                "email": "support@mycurrency.in",
+                "address": "E-187, Jindal Global City, Sector 35, Sonipat, Haryana 131001"
+            },
+            "bottom": {
+                "copyright": "© 2026 mycurrency. All rights reserved. RBI Authorized Dealer.",
+                "links": [
+                    "Privacy Policy",
+                    "Terms of Service",
+                    "Refund Policy"
+                ]
+            }
+        }
+    }
+}

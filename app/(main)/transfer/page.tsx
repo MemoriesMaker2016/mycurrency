@@ -1,9 +1,5 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { Header } from "@/components/header"
-import { Footer } from "@/components/footer"
-import { RateTicker } from "@/components/rate-ticker"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -12,16 +8,17 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { formatCurrency, getCurrencyByCode } from "@/lib/currencies"
 import {
   ArrowRight,
-  Send,
-  Building2,
-  GraduationCap,
-  Home,
   Briefcase,
-  Shield,
+  Building2,
+  CheckCircle,
   Clock,
   Globe,
-  CheckCircle,
+  GraduationCap,
+  Home,
+  Send,
+  Shield,
 } from "lucide-react"
+import { useEffect, useState } from "react"
 
 const transferPurposes = [
   { value: "education", label: "University Fees", icon: GraduationCap },
@@ -85,8 +82,6 @@ export default function TransferPage() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Header />
-      <RateTicker />
       <main className="flex-1">
         {/* Hero Section */}
         <section className="bg-gradient-to-br from-primary/5 via-background to-accent/5 py-12 md:py-16">
@@ -295,7 +290,6 @@ export default function TransferPage() {
           </div>
         </section>
       </main>
-      <Footer />
     </div>
   )
 }

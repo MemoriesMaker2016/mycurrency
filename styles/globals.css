@@ -1,5 +1,8 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
+@import "tailwindcss/preflight"; /* replaces @tailwind base */
+@import "tailwindcss/components"; /* replaces @tailwind components */
+@import "tailwindcss/utilities"; /* replaces @tailwind utilities */
 
 @custom-variant dark (&:is(.dark *));
 
@@ -123,3 +126,5 @@
     @apply bg-background text-foreground;
   }
 }
+
+

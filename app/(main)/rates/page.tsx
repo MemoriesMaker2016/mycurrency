@@ -1,9 +1,5 @@
 'use client';
 
-import { useState } from 'react';
-import Header from '@/components/header';
-import Footer from '@/components/footer';
-import { RateTicker } from '@/components/rate-ticker';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -17,13 +13,14 @@ import {
 } from '@/components/ui/table';
 import { currencies } from '@/lib/currencies';
 import {
-  Search,
-  RefreshCw,
   Bell,
   Download,
-  TrendingUp,
+  RefreshCw,
+  Search,
   TrendingDown,
+  TrendingUp,
 } from 'lucide-react';
+import { useState } from 'react';
 
 export default function RatesPage() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -42,8 +39,6 @@ export default function RatesPage() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Header />
-      <RateTicker />
       <main className="flex-1 py-8">
         <div className="container mx-auto px-4">
           {/* Header */}
@@ -224,7 +219,6 @@ export default function RatesPage() {
           </div>
         </div>
       </main>
-      <Footer />
     </div>
   );
 }

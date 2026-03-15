@@ -1,16 +1,13 @@
-import Header from '@/components/header';
-import Footer from '@/components/footer';
-import { RateTicker } from '@/components/rate-ticker';
 import { Card, CardContent } from '@/components/ui/card';
 import {
-  Shield,
   Award,
-  Users,
-  Globe,
-  Target,
-  Heart,
-  TrendingUp,
   CheckCircle,
+  Globe,
+  Heart,
+  Shield,
+  Target,
+  TrendingUp,
+  Users,
 } from 'lucide-react';
 
 const stats = [
@@ -85,8 +82,6 @@ const milestones = [
 export default function AboutPage() {
   return (
     <div className="min-h-screen flex flex-col">
-      <Header />
-      <RateTicker />
       <main className="flex-1">
         {/* Hero Section */}
         <section className="bg-primary text-primary-foreground py-16 md:py-24">
@@ -352,7 +347,6 @@ export default function AboutPage() {
           </div>
         </section>
       </main>
-      <Footer />
     </div>
   );
 }

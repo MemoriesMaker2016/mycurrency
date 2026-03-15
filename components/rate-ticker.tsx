@@ -5,9 +5,8 @@ import { TrendingUp, TrendingDown } from 'lucide-react';
 
 export function RateTicker() {
   return (
-    <div className="bg-primary/5 border-b border-border overflow-hidden py-2">
-      <div
-        className="flex animate-scroll-left whitespace-nowrap"
+    <div className="bg-primary/5 border-b border-border overflow-hidden py-2 ">
+     <div className="flex animate-scroll-left whitespace-nowrap"
         style={{ fontSize: '20px' }}
       >
         {[...currencies, ...currencies].map((currency, index) => (
