@@ -6,6 +6,7 @@ import { Geist_Mono, Inter } from "next/font/google";
 import type React from "react";
 import { Toaster } from "sonner";
 import "./globals.css";
+import {NextIntlClientProvider} from 'next-intl';
 
 const _inter = Inter({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
@@ -32,7 +33,10 @@ export default function RootLayout({
       <body className={`font-sans antialiased`}>
         <AuthProvider>
           <Toaster position="top-right" richColors />
+          <NextIntlClientProvider>
+
           {children}
+          </NextIntlClientProvider>
           <ScrollToTop />
           <Analytics />
         </AuthProvider>

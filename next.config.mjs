@@ -1,3 +1,5 @@
+import createNextIntlPlugin from 'next-intl/plugin';
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   typescript: {
@@ -6,9 +8,11 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-    devIndicators: {
+  devIndicators: {
     buildActivity: false,
   },
 };
 
-export default nextConfig;
+const withNextIntl = createNextIntlPlugin();
+
+export default withNextIntl(nextConfig);

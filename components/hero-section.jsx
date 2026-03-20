@@ -1,5 +1,6 @@
 import { ExchangeCalculator } from './exchange-calculator';
 import { Shield, Clock, Star, Users } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 const stats = [
   { icon: Users, value: '10K+', label: 'Happy Customers' },
@@ -7,47 +8,39 @@ const stats = [
   { icon: Shield, value: '100%', label: 'Secure' },
   { icon: Clock, value: '24/7', label: 'Support' },
 ];
-
 export function HeroSection() {
+  const t = useTranslations('HomePage.aboutHomepage');
   return (
     <section className="relative bg-linear-to-br from-primary/5 via-background to-accent/5 py-12 md:py-20 pb-24">
       <div className="container mx-auto px-4">
         <div className="grid lg:grid-cols-2 gap-12 items-start">
           {/* Left Content */}
           <div className="space-y-8">
+            {/* Cashback */}
             <div className="inline-flex items-center gap-2 mb-6 bg-white rounded-full px-4 py-2 shadow-sm">
               <div className="w-2 h-2 bg-green-500 rounded-full"></div>
               <span className="text-xs font-bold tracking-widest text-gray-800">
-                UP TO 2% CASHBACK ON ALL ORDERS
+                {t('hero.cashback')}
               </span>
             </div>
 
+            {/* Title */}
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-tight text-balance">
-              <span style={{ color: '#1F3C6D' }}>Best Rates for</span>{' '}
-              <span className="text-primary">Foreign Exchange</span>
+              <span style={{ color: '#1F3C6D' }}>
+                {t('hero.title').split('Foreign Exchange')[0]}
+              </span>{' '}
+              <span className="text-primary">
+                Foreign Exchange
+              </span>
             </h1>
 
+            {/* Description */}
             <p className="text-lg text-muted-foreground leading-relaxed max-w-xl">
-              Buy & sell foreign currency online at the best exchange rates.
-              Same-day doorstep delivery in 65+ cities across India. RBI
-              authorized and 100% secure.
+              {t('hero.description')}
             </p>
 
             {/* Stats */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-4">
-              {stats.map((stat) => (
-                <div
-                  key={stat.label}
-                  className="text-center p-4 bg-card rounded-xl border border-border"
-                >
-                  <stat.icon className="h-5 w-5 mx-auto mb-2 text-primary" />
-                  <p className="text-2xl font-bold text-foreground">
-                    {stat.value}
-                  </p>
-                  <p className="text-xs text-muted-foreground">{stat.label}</p>
-                </div>
-              ))}
-            </div>
+           
 
             {/* Trust Indicators */}
             <div className="flex flex-wrap items-center gap-6 pt-4">
@@ -56,13 +49,14 @@ export function HeroSection() {
                   RBI
                 </div>
                 <span className="text-sm text-muted-foreground">
-                  Authorized Dealer
+                  {t('security.rbi')}
                 </span>
               </div>
+
               <div className="flex items-center gap-2">
                 <Shield className="h-5 w-5 text-success" />
                 <span className="text-sm text-muted-foreground">
-                  256-bit Encryption
+                  {t('security.encryption')}
                 </span>
               </div>
             </div>

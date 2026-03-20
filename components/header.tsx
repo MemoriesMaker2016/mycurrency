@@ -23,8 +23,14 @@ import Image from "next/image";
 import { useAuthStore } from "@/zustandStore/login";
 import { useRouter } from "next/navigation";
 import { useNotificationCount } from "@/zustandStore/notificationCount";
+import { useTranslations } from "next-intl";
+import Language from "./ui/language";
 
 export default function Header() {
+  const t     = useTranslations("Header");
+  const tNav  = useTranslations("Header.NavBar");
+  const tTop  = useTranslations("Header.ContactHeader");
+
   const count = useNotificationCount((s) => s.count);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [open, setOpen] = useState(false);
@@ -61,18 +67,20 @@ export default function Header() {
         <div className="container mx-auto px-4 py-3 flex items-center justify-between text-sm">
           <div className="flex items-center gap-4">
             <a
-              href="tel:+919876543210"
+              href={`tel:${tTop("Number")}`}
               className="flex items-center gap-1 hover:opacity-80 transition-opacity"
             >
               <Phone className="h-3 w-3" />
-              <span>+91 99912 25544</span>
+              <span>{tTop("Number")}</span>
             </a>
             <span className="hidden md:inline text-primary-foreground/70">|</span>
-            <span className="hidden md:inline">Mon - Sat: 9:00 AM - 7:00 PM</span>
+            <span className="hidden md:inline">
+              {tTop("Week")} {tTop("time")}
+            </span>
           </div>
           <div className="flex items-center gap-3">
             <Link href="/track-orders" className="hover:underline">
-              Track Order
+              {tTop("oredr")}
             </Link>
           </div>
         </div>
@@ -99,7 +107,7 @@ export default function Header() {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="flex items-center gap-1 text-sm cursor-pointer">
-                  Exchange Currency
+                  {tNav("exchangeCurrency")}
                   <ChevronDown className="h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
@@ -122,29 +130,30 @@ export default function Header() {
             <Link href="/transfer">
               <Button variant="ghost" className="flex items-center gap-1 cursor-pointer">
                 <Send className="h-4 w-4" />
-                Money Transfer
+                {tNav("moneyTransfer")}
               </Button>
             </Link>
             <Link href="/rates">
-              <Button variant="ghost" className="cursor-pointer">Live Rates</Button>
+              <Button variant="ghost" className="cursor-pointer">{tNav("liveRates")}</Button>
             </Link>
             <Link href="/about">
-              <Button variant="ghost" className="cursor-pointer">About Us</Button>
+              <Button variant="ghost" className="cursor-pointer">{tNav("aboutUs")}</Button>
             </Link>
             <Link href="/contact">
-              <Button variant="ghost" className="cursor-pointer">Contact</Button>
+              <Button variant="ghost" className="cursor-pointer">{tNav("contact")}</Button>
             </Link>
+            <Language/>
           </nav>
 
           {/* Right side — desktop */}
           <div className="flex items-center gap-2">
 
-            {/* Notification Bell — always visible when authenticated */}
+            {/* Notification Bell */}
             {isAuthenticated && (
               <Link href="/notifications">
                 <Button variant="ghost" size="icon" className="relative" aria-label="Notifications">
                   <Bell className="w-5 h-5" />
-                  {count >=0 && (
+                  {count >= 0 && (
                     <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 bg-destructive text-destructive-foreground text-[10px] font-semibold rounded-full flex items-center justify-center leading-none">
                       {count > 99 ? "99+" : count}
                     </span>
@@ -193,11 +202,13 @@ export default function Header() {
             ) : (
               <div className="hidden lg:flex items-center gap-2">
                 <Link href="/login">
-                  <Button variant="outline" size="sm" className="cursor-pointer">Login</Button>
+                  <Button variant="outline" size="sm" className="cursor-pointer">
+                    {tNav("login")}
+                  </Button>
                 </Link>
                 <Link href="/register">
                   <Button size="sm" className="bg-accent text-accent-foreground hover:bg-accent/90 cursor-pointer">
-                    Sign Up
+                    {tNav("signUp")}
                   </Button>
                 </Link>
               </div>
@@ -226,16 +237,16 @@ export default function Header() {
                 Sell Currency
               </Link>
               <Link href="/transfer" className="px-4 py-2.5 hover:bg-secondary rounded-md text-sm" onClick={() => setMobileMenuOpen(false)}>
-                Money Transfer
+                {tNav("moneyTransfer")}
               </Link>
               <Link href="/rates" className="px-4 py-2.5 hover:bg-secondary rounded-md text-sm" onClick={() => setMobileMenuOpen(false)}>
-                Live Rates
+                {tNav("liveRates")}
               </Link>
               <Link href="/about" className="px-4 py-2.5 hover:bg-secondary rounded-md text-sm" onClick={() => setMobileMenuOpen(false)}>
-                About Us
+                {tNav("aboutUs")}
               </Link>
               <Link href="/contact" className="px-4 py-2.5 hover:bg-secondary rounded-md text-sm" onClick={() => setMobileMenuOpen(false)}>
-                Contact
+                {tNav("contact")}
               </Link>
 
               <div className="border-t border-border my-2" />
@@ -261,10 +272,14 @@ export default function Header() {
               ) : (
                 <div className="flex gap-2 px-4 pt-1">
                   <Link href="/login" className="flex-1">
-                    <Button variant="outline" size="sm" className="w-full bg-transparent">Login</Button>
+                    <Button variant="outline" size="sm" className="w-full bg-transparent">
+                      {tNav("login")}
+                    </Button>
                   </Link>
                   <Link href="/register" className="flex-1">
-                    <Button size="sm" className="w-full bg-accent text-accent-foreground">Sign Up</Button>
+                    <Button size="sm" className="w-full bg-accent text-accent-foreground">
+                      {tNav("signUp")}
+                    </Button>
                   </Link>
                 </div>
               )}
