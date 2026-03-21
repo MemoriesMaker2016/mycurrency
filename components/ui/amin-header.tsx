@@ -32,6 +32,7 @@ export function AdminHeader({
   onLogout,
 }: AdminHeaderProps) {
   const profile = useAuthStore((a) => a.user);
+  const role = profile?.role
 const count = useNotificationCount((s) => s.count);
   return (
     <header className="sticky top-0 z-30 bg-card/80 backdrop-blur-md border-b border-border">
@@ -50,6 +51,8 @@ const count = useNotificationCount((s) => s.count);
         {/* Right side actions */}
         <div className="flex items-center gap-3 ml-auto">
           {/* Notifications */}
+          {
+            role !=='subadmin'&&
           <Link href={"/admin/notifications"}>
             <Button
               variant="ghost"
@@ -65,6 +68,7 @@ const count = useNotificationCount((s) => s.count);
               )}
             </Button>
           </Link>
+          }
 
           {/* Profile dropdown */}
           <DropdownMenu>
@@ -89,11 +93,14 @@ const count = useNotificationCount((s) => s.count);
                 <p className="font-medium text-sm">{profile?.firstName}</p>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
+              {
+                role !=='subadmin'&&
               <Link href="/admin/settings">
                 <DropdownMenuItem>
                   <Settings className="w-4 h-4 mr-2" /> Settings
                 </DropdownMenuItem>
               </Link>
+              }
               <DropdownMenuSeparator />
               <DropdownMenuItem className="text-destructive" onClick={onLogout}>
                 <LogOut className="w-4 h-4 mr-2" /> Logout

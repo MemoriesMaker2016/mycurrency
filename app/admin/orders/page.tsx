@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
 import {
-  ArrowLeft, CheckCircle, Clock, Download, Eye,
-  Filter, MoreHorizontal, RefreshCcw, XCircle, Loader2,
+  ArrowLeft, CheckCircle, Clock, Eye,
+  Filter, MoreHorizontal, XCircle, Loader2, Search, X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -23,6 +23,7 @@ import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "@/components/ui/table";
 import { Separator } from "@/components/ui/separator";
+import { Input } from "@/components/ui/input";
 import { Pagination } from "@/components/ui/pagination";
 import { getAllUsersOrderData, updateStatusUsersOrderData } from "@/apiFasad/apiCalls/admin";
 
@@ -35,7 +36,13 @@ type OrderStatus = "pending" | "confirmed" | "cancelled";
 type Order = {
   _id: string;
   orderId: string;
-  userId: { _id: string; firstName: string; lastName: string; email: string; phone: string };
+  userId: {
+    _id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    phone: string;
+  };
   orderType: "buy" | "sell";
   product: "notes" | "card";
   fromCurrency: string;
@@ -53,9 +60,9 @@ type Order = {
 const ITEMS_PER_PAGE = 10;
 
 const STATUS_CONFIG: Record<OrderStatus, { label: string; icon: React.ReactNode; className: string }> = {
-  pending:   { label: "Pending",   icon: <Clock className="w-3 h-3 mr-1" />,        className: "bg-amber-100 text-amber-700" },
-  confirmed: { label: "Confirmed", icon: <CheckCircle className="w-3 h-3 mr-1" />,  className: "bg-emerald-100 text-emerald-700" },
-  cancelled: { label: "Cancelled", icon: <XCircle className="w-3 h-3 mr-1" />,      className: "bg-red-100 text-red-600" },
+  pending:   { label: "Pending",   icon: <Clock className="w-3 h-3 mr-1" />,       className: "bg-amber-100 text-amber-700" },
+  confirmed: { label: "Confirmed", icon: <CheckCircle className="w-3 h-3 mr-1" />, className: "bg-emerald-100 text-emerald-700" },
+  cancelled: { label: "Cancelled", icon: <XCircle className="w-3 h-3 mr-1" />,     className: "bg-red-100 text-red-600" },
 };
 
 // ─────────────────────────────────────────────────────────────
@@ -71,7 +78,7 @@ function StatusBadge({ status }: { status: OrderStatus }) {
 }
 
 // ─────────────────────────────────────────────────────────────
-// View Details Modal
+// Order Details Modal
 // ─────────────────────────────────────────────────────────────
 function OrderDetailsModal({
   order,
@@ -112,7 +119,7 @@ function OrderDetailsModal({
 
           <Separator />
 
-          {/* Order Details */}
+          {/* Transaction */}
           <section>
             <p className="text-xs font-semibold uppercase text-muted-foreground mb-2">Transaction</p>
             <div className="grid grid-cols-2 gap-y-1 text-sm">
@@ -133,7 +140,7 @@ function OrderDetailsModal({
 }
 
 // ─────────────────────────────────────────────────────────────
-// Skeleton rows
+// Skeleton Rows
 // ─────────────────────────────────────────────────────────────
 function SkeletonRows() {
   return (
@@ -141,7 +148,9 @@ function SkeletonRows() {
       {Array.from({ length: 5 }).map((_, i) => (
         <TableRow key={i}>
           {Array.from({ length: 7 }).map((_, j) => (
-            <TableCell key={j}><div className="h-4 bg-muted animate-pulse rounded w-20" /></TableCell>
+            <TableCell key={j}>
+              <div className="h-4 bg-muted animate-pulse rounded w-20" />
+            </TableCell>
           ))}
         </TableRow>
       ))}
@@ -153,36 +162,56 @@ function SkeletonRows() {
 // Page
 // ─────────────────────────────────────────────────────────────
 export default function AllOrdersPage() {
-  const [orders, setOrders]             = useState<Order[]>([]);
-  const [totalOrders, setTotalOrders]   = useState(0);
-  const [totalPages, setTotalPages]     = useState(1);
-  const [currentPage, setCurrentPage]   = useState(1);
-  const [statusFilter, setStatusFilter] = useState("all");
-  const [loading, setLoading]           = useState(true);
-  const [viewOrder, setViewOrder]       = useState<Order | null>(null);
-  const [updatingId, setUpdatingId]     = useState<string | null>(null);
+  const [orders, setOrders]               = useState<Order[]>([]);
+  const [totalOrders, setTotalOrders]     = useState(0);
+  const [totalPages, setTotalPages]       = useState(1);
+  const [currentPage, setCurrentPage]     = useState(1);
+  const [statusFilter, setStatusFilter]   = useState("all");
+  const [searchQuery, setSearchQuery]     = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [loading, setLoading]             = useState(true);
+  const [viewOrder, setViewOrder]         = useState<Order | null>(null);
+  const [updatingId, setUpdatingId]       = useState<string | null>(null);
+  const debounceRef                       = useRef<NodeJS.Timeout | null>(null);
 
-  // ── Fetch ────────────────────────────────────────────────
+  // ── Search with debounce ─────────────────────────────────
+  const handleSearchChange = (value: string) => {
+    setSearchQuery(value);
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => {
+      setDebouncedSearch(value);
+      setCurrentPage(1);
+    }, 500);
+  };
+
+  const clearSearch = () => {
+    setSearchQuery("");
+    setDebouncedSearch("");
+    setCurrentPage(1);
+  };
+
+  // ── Fetch orders ─────────────────────────────────────────
   const fetchOrders = useCallback(async () => {
     setLoading(true);
     try {
       const params = new URLSearchParams({
         page:  String(currentPage),
         limit: String(ITEMS_PER_PAGE),
-        ...(statusFilter !== "all" && { status: statusFilter }),
+        ...(statusFilter !== "all"   && { status: statusFilter }),
+        ...(debouncedSearch.trim()   && { search: debouncedSearch.trim() }),
       });
       const data = await getAllUsersOrderData(params);
-      if (data) {
+      if (data && Array.isArray(data.data)) {
         setOrders(data.data);
-        setTotalOrders(data.totalOrders);
-        setTotalPages(data.totalPages);
+        setTotalOrders(data.totalOrders ?? 0);
+        setTotalPages(data.totalPages ?? 1);
       }
     } catch (err) {
       console.error("Failed to fetch orders", err);
     } finally {
       setLoading(false);
     }
-  }, [currentPage, statusFilter]);
+  }, [currentPage, statusFilter, debouncedSearch]);
 
   useEffect(() => { fetchOrders(); }, [fetchOrders]);
 
@@ -200,7 +229,7 @@ export default function AllOrdersPage() {
   const handleStatusUpdate = async (id: string, status: OrderStatus) => {
     setUpdatingId(id);
     try {
-      await updateStatusUsersOrderData( {id, status} );
+      await updateStatusUsersOrderData({ id, status });
       setOrders((prev) =>
         prev.map((o) => (o._id === id ? { ...o, status } : o))
       );
@@ -213,11 +242,14 @@ export default function AllOrdersPage() {
 
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
 
+  // ─────────────────────────────────────────────────────────
+  // Render
+  // ─────────────────────────────────────────────────────────
   return (
     <div>
       <main className="p-4 sm:p-6 lg:p-8">
 
-        {/* Page title */}
+        {/* Page Title */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
           <div className="flex items-center gap-3">
             <Link href="/admin">
@@ -234,27 +266,69 @@ export default function AllOrdersPage() {
 
         {/* Table Card */}
         <Card>
-          <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div>
-              <CardTitle>Order History</CardTitle>
-              <CardDescription>
-                {loading
-                  ? "Loading…"
-                  : `Showing ${startIndex + 1}–${Math.min(startIndex + ITEMS_PER_PAGE, totalOrders)} of ${totalOrders} orders`}
-              </CardDescription>
+          <CardHeader className="flex flex-col gap-4">
+            <div className="flex flex-col  w-full sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <CardTitle>Order History</CardTitle>
+                <CardDescription>
+                  {loading
+                    ? "Loading…"
+                    : totalOrders === 0
+                    ? "No orders found"
+                    : `Showing ${startIndex + 1}–${Math.min(startIndex + ITEMS_PER_PAGE, totalOrders)} of ${totalOrders} orders`}
+                </CardDescription>
+              </div>
+
+              {/* Search + Filter */}
+              <div className="flex  items-center justify-end  gap-2 flex-wrap">
+                {/* Search */}
+                <div className="relative">
+                  <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
+                  <Input
+                    placeholder="Order ID, name, email…"
+                    value={searchQuery}
+                    onChange={(e) => handleSearchChange(e.target.value)}
+                    className="pl-9 pr-8 w-56 sm:w-64"
+                  />
+                  {searchQuery && (
+                    <button
+                      onClick={clearSearch}
+                      className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  )}
+                </div>
+
+                {/* Status Filter */}
+                <Select value={statusFilter} onValueChange={handleFilterChange}>
+                  <SelectTrigger className="w-40">
+                    <Filter className="w-4 h-4 mr-2" />
+                    <SelectValue placeholder="Filter status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Status</SelectItem>
+                    <SelectItem value="pending">Pending</SelectItem>
+                    <SelectItem value="confirmed">Confirmed</SelectItem>
+                    <SelectItem value="cancelled">Cancelled</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
-            <Select value={statusFilter} onValueChange={handleFilterChange}>
-              <SelectTrigger className="w-40">
-                <Filter className="w-4 h-4 mr-2" />
-                <SelectValue placeholder="Filter status" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Status</SelectItem>
-                <SelectItem value="pending">Pending</SelectItem>
-                <SelectItem value="confirmed">Confirmed</SelectItem>
-                <SelectItem value="cancelled">Cancelled</SelectItem>
-              </SelectContent>
-            </Select>
+
+            {/* Active search indicator */}
+            {debouncedSearch && (
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <Search className="w-3 h-3" />
+                Searching for <span className="font-medium text-foreground">"{debouncedSearch}"</span>
+                <button
+                  onClick={clearSearch}
+                  className="text-destructive hover:underline text-xs ml-1"
+                >
+                  Clear
+                </button>
+              </div>
+            )}
           </CardHeader>
 
           <CardContent>
@@ -277,18 +351,32 @@ export default function AllOrdersPage() {
                     <SkeletonRows />
                   ) : orders.length === 0 ? (
                     <TableRow>
-                      <TableCell colSpan={7} className="text-center text-muted-foreground py-10">
-                        No orders found
+                      <TableCell colSpan={7} className="text-center text-muted-foreground py-16">
+                        <div className="flex flex-col items-center gap-2">
+                          <Search className="w-8 h-8 text-muted-foreground/50" />
+                          <p className="font-medium">No orders found</p>
+                          {debouncedSearch && (
+                            <p className="text-xs">
+                              No results for "{debouncedSearch}".{" "}
+                              <button onClick={clearSearch} className="underline hover:text-foreground">
+                                Clear search
+                              </button>
+                            </p>
+                          )}
+                        </div>
                       </TableCell>
                     </TableRow>
                   ) : (
                     orders.map((order) => (
                       <TableRow key={order._id} className="hover:bg-secondary/30">
+
                         <TableCell className="font-medium">{order.orderId}</TableCell>
 
                         <TableCell>
-                          <p className="font-medium">{order?.userId.firstName} {order?.userId.lastName}</p>
-                          <p className="text-xs text-muted-foreground">{order?.userId.email}</p>
+                          <p className="font-medium">
+                            {order.userId.firstName} {order.userId.lastName}
+                          </p>
+                          <p className="text-xs text-muted-foreground">{order.userId.email}</p>
                         </TableCell>
 
                         <TableCell className="hidden sm:table-cell capitalize">
@@ -320,20 +408,20 @@ export default function AllOrdersPage() {
                                 </Button>
                               </DropdownMenuTrigger>
                               <DropdownMenuContent align="end">
-                                {/* View details */}
+
                                 <DropdownMenuItem onClick={() => setViewOrder(order)}>
                                   <Eye className="w-4 h-4 mr-2" /> View Details
                                 </DropdownMenuItem>
 
                                 <DropdownMenuSeparator />
 
-                                {/* Status updates */}
                                 <DropdownMenuItem
                                   disabled={order.status === "confirmed"}
                                   onClick={() => handleStatusUpdate(order._id, "confirmed")}
                                 >
                                   <CheckCircle className="w-4 h-4 mr-2 text-emerald-600" /> Mark Confirmed
                                 </DropdownMenuItem>
+
                                 <DropdownMenuItem
                                   disabled={order.status === "pending"}
                                   onClick={() => handleStatusUpdate(order._id, "pending")}
@@ -350,10 +438,12 @@ export default function AllOrdersPage() {
                                 >
                                   <XCircle className="w-4 h-4 mr-2" /> Cancel Order
                                 </DropdownMenuItem>
+
                               </DropdownMenuContent>
                             </DropdownMenu>
                           )}
                         </TableCell>
+
                       </TableRow>
                     ))
                   )}
@@ -371,7 +461,7 @@ export default function AllOrdersPage() {
         </Card>
       </main>
 
-      {/* View details modal */}
+      {/* View Details Modal */}
       <OrderDetailsModal order={viewOrder} onClose={() => setViewOrder(null)} />
     </div>
   );

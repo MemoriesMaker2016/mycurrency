@@ -1,6 +1,6 @@
 'use client'
 
-import { MoreHorizontal, Search, Filter } from "lucide-react";
+import { MoreHorizontal, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -12,9 +12,6 @@ import {
 import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "@/components/ui/table";
-import {
-  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
-} from "@/components/ui/select";
 import { useAdmin } from "@/app/contexts/admin-context";
 
 // ─────────────────────────────────────────────────────────────
@@ -26,7 +23,7 @@ export type User = {
   lastName: string;
   email: string;
   phone: string;
-  status: string;   // "active" | "inactive" | "pending"
+  status: string;
   role: string;
   country: string;
   createdAt: string;
@@ -39,6 +36,7 @@ interface UsersTableProps {
   currentPage: number;
   itemsPerPage: number;
   searchQuery: string;
+  searchPlaceholder?: string;           // ✅ new optional prop
   onStatusFilterChange: (value: string) => void;
   onSearchChange: (value: string) => void;
   onEdit: (user: User) => void;
@@ -46,16 +44,16 @@ interface UsersTableProps {
 }
 
 // ─────────────────────────────────────────────────────────────
-// Internal helpers
+// Helpers
 // ─────────────────────────────────────────────────────────────
 function RoleBadge({ role }: { role: string }) {
   if (role === "admin")
     return <Badge className="bg-blue-100 text-blue-700 hover:bg-blue-100">Admin</Badge>;
-  if(role=='user')
-  return <Badge className="bg-emerald-100 text-emerald-700 hover:bg-emerald-100">User</Badge>;
-  if(role=='subadmin')
-    return <Badge className="bg-emerald-100 text-emerald-700 hover:bg-emerald-100">SubAdmin</Badge>;
-
+  if (role === "user")
+    return <Badge className="bg-emerald-100 text-emerald-700 hover:bg-emerald-100">User</Badge>;
+  if (role === "subadmin")
+    return <Badge className="bg-purple-100 text-purple-700 hover:bg-purple-100">SubAdmin</Badge>;
+  return null;
 }
 
 function StatusDot({ isActive }: { isActive: boolean }) {
@@ -90,10 +88,11 @@ function SkeletonRows({ cols = 7 }: { cols?: number }) {
 // ─────────────────────────────────────────────────────────────
 export function UsersTable({
   users, loading, totalUsers, currentPage, itemsPerPage,
-  searchQuery, onSearchChange,
+  searchQuery, searchPlaceholder = "Search by name or email…", // ✅ default placeholder
+  onSearchChange,
   onEdit, onDelete,
 }: UsersTableProps) {
-  const { activeUserIds } = useAdmin(); // Get live active users from context
+  const { activeUserIds } = useAdmin();
   const startIndex = (currentPage - 1) * itemsPerPage;
 
   return (
@@ -105,21 +104,21 @@ export function UsersTable({
             <CardDescription>
               {loading
                 ? "Loading…"
+                : totalUsers === 0
+                ? "No users found"
                 : `Showing ${startIndex + 1}–${Math.min(startIndex + itemsPerPage, totalUsers)} of ${totalUsers} users`}
             </CardDescription>
           </div>
 
-          <div className="flex items-center gap-2">
-            <div className="relative sm:hidden flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-              <Input
-                placeholder="Search…"
-                className="pl-10 bg-secondary/50"
-                value={searchQuery}
-                onChange={(e) => onSearchChange(e.target.value)}
-              />
-            </div>
-
+          {/* ✅ Search box — visible on all screen sizes, pinned to right */}
+          <div className="relative ml-auto w-full sm:w-auto">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
+            <Input
+              placeholder={searchPlaceholder}
+              className="pl-9 w-full sm:w-64 bg-secondary/50"
+              value={searchQuery}
+              onChange={(e) => onSearchChange(e.target.value)}
+            />
           </div>
         </div>
       </CardHeader>
@@ -145,7 +144,9 @@ export function UsersTable({
               ) : users.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={7} className="text-center text-muted-foreground py-10">
-                    No users found
+                    {searchQuery
+                      ? `No users found for "${searchQuery}"`
+                      : "No users found"}
                   </TableCell>
                 </TableRow>
               ) : (
@@ -166,12 +167,11 @@ export function UsersTable({
 
                     <TableCell className="hidden md:table-cell text-sm">{user.phone}</TableCell>
                     <TableCell className="hidden md:table-cell text-sm">{user.country}</TableCell>
-
-                    {/* Status: Active/Inactive based on live socket */}
+                    {console.log(activeUserIds)}
                     <TableCell>
                       <StatusDot isActive={activeUserIds.includes(user._id)} />
                     </TableCell>
-                    
+
                     <TableCell><RoleBadge role={user?.role} /></TableCell>
 
                     <TableCell className="hidden sm:table-cell text-sm text-muted-foreground">

@@ -34,6 +34,8 @@ export function AdminProvider({ children }: { children: ReactNode }) {
     socket.emit("adminJoin");
     socket.on("activeUsers", (data: { count: number; ids: string[] }) => {
       setActiveUsersCount(data.count);
+      console.log(data);
+      
       setActiveUserIds(data.ids);
     });
 

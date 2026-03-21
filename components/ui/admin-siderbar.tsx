@@ -31,10 +31,11 @@ interface AdminSidebarProps {
 // Nav links — add new admin pages here
 // ─────────────────────────────────────────────────────────────
 const NAV_LINKS = [
-  { icon: Home,       label: "Dashboard", href: "/admin" },
-  { icon: Users,      label: "Users",     href: "/admin/users" },
-  { icon: RefreshCcw, label: "Orders",    href: "/admin/orders" },
-  { icon: Settings,   label: "Settings",  href: "/admin/settings" },
+  { icon: Home,       label: "Dashboard",     href: "/admin",               roles: ["admin"] },
+  { icon: Users,      label: "Users",         href: "/admin/users",         roles: ["admin"] },
+  { icon: RefreshCcw, label: "Orders",        href: "/admin/orders",        roles: ["admin", "subadmin"] },
+  { icon: Settings,   label: "Settings",      href: "/admin/settings",      roles: ["admin"] },
+  // Add more routes + allowed roles here
 ];
 
 // ─────────────────────────────────────────────────────────────
@@ -48,6 +49,10 @@ export function AdminSidebar({
 }: AdminSidebarProps) {
   const pathname = usePathname();
   const profile = useAuthStore((a)=>a.user)
+const role = profile?.role ?? ''
+
+// Filter links based on role
+const visibleLinks = NAV_LINKS.filter(link => link.roles.includes(role))
 
   return (
     <TooltipProvider delayDuration={100}>
@@ -105,7 +110,7 @@ export function AdminSidebar({
 
         {/* ── Nav ── */}
         <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
-          {NAV_LINKS.map(({ icon: Icon, label, href }) => {
+          {visibleLinks.map(({ icon: Icon, label, href }) => {
             const active = pathname === href;
             const linkClass = `
               flex items-center gap-3 px-3 py-3 rounded-lg transition-all duration-200

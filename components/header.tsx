@@ -149,7 +149,7 @@ export default function Header() {
           <div className="flex items-center gap-2">
 
             {/* Notification Bell */}
-            {isAuthenticated && (
+            {isAuthenticated && user?.role !=='subadmin' && (
               <Link href="/notifications">
                 <Button variant="ghost" size="icon" className="relative" aria-label="Notifications">
                   <Bell className="w-5 h-5" />
