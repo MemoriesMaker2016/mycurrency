@@ -100,6 +100,7 @@ function NotifCard({
       : <X className="w-4 h-4 text-white" />;
 
   return (
+    <Link  href={role ==='admin' ? 'orders':'track-orders'}>
     <div className={`relative flex gap-3 p-4 rounded-2xl border transition-all
       ${isNew ? "bg-white border-primary/20 shadow-sm shadow-primary/5" : "bg-slate-50/60 border-slate-100"}`}
     >
@@ -160,6 +161,8 @@ function NotifCard({
         </button>
       </div>
     </div>
+  </Link>
+    
   );
 }
 

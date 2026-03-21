@@ -2,6 +2,7 @@ import { loginOutUser } from "@/apiFasad/authApiCall";
 import { create } from "zustand";
 
 type User = {
+  _id(arg0: string, _id: any): unknown;
   id: string;
   firstName: string;
   email: string;

@@ -31,11 +31,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     getUserData()
   }, [])
 
- // Admin has its own socket in AdminProvider
+  // Admin has its own socket in AdminProvider
   useEffect(() => {
     if (!user || user.role === 'admin') return; // admins handled in AdminProvider
 
     const socket = io(process.env.NEXT_PUBLIC_API_URL!);
+    if (!socket || !user?._id) return;  // wait until user is loaded
 
     // join personal room by userId
     socket.emit('registerUser', user._id);
@@ -43,7 +44,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     // listen for status changes on their orders
     socket.on('orderStatusNotification', () => {
       console.log("yes");
-      
+
       increment(); // bump user notification badge
       toast("📦 New Order Placed!", {
         description: "A customer just placed a new order.",
@@ -60,7 +61,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     };
   }, [user]);
 
-  if (loading) return <Loader/> // or a spinner
+  if (loading) return <Loader /> // or a spinner
 
   return <>{children}</>
 }
