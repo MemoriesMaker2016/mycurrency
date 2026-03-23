@@ -11,6 +11,9 @@ const nextConfig = {
   devIndicators: {
     buildActivity: false,
   },
+  experimental: {
+    turbo: {}, 
+  },
 };
 
 const withNextIntl = createNextIntlPlugin();
