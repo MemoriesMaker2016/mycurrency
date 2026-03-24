@@ -78,11 +78,14 @@ export default function Header() {
               {tTop("Week")} {tTop("time")}
             </span>
           </div>
+          {isAuthenticated && user?.role ==='user' &&
+
           <div className="flex items-center gap-3">
             <Link href="/track-orders" className="hover:underline">
               {tTop("oredr")}
             </Link>
           </div>
+          }
         </div>
       </div>
 
