@@ -7,6 +7,7 @@ import type React from "react";
 import { Toaster } from "sonner";
 import "./globals.css";
 import {NextIntlClientProvider} from 'next-intl';
+import { getMessages } from "next-intl/server";
 
 const _inter = Inter({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
@@ -22,18 +23,19 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async  function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+    const messages = await getMessages();
 
   return (
     <html lang="en">
       <body className={`font-sans antialiased`}>
         <AuthProvider>
           <Toaster position="top-right" richColors />
-          <NextIntlClientProvider>
+          <NextIntlClientProvider messages={messages}>
 
           {children}
           </NextIntlClientProvider>
