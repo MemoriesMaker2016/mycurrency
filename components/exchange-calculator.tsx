@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -12,7 +13,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-
 import {
   Select,
   SelectContent,
@@ -21,28 +21,19 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import {
-  currencies,
-  formatCurrency,
-  getCurrencyByCode,
-} from '@/lib/currencies';
-import {
-  ArrowRightLeft,
-  RefreshCw,
-  Banknote,
-  CreditCard,
-  ArrowRight,
-} from 'lucide-react';
+import { currencies, formatCurrency, getCurrencyByCode } from '@/lib/currencies';
+import { ArrowRightLeft, RefreshCw, Banknote, CreditCard, ArrowRight } from 'lucide-react';
 import { useAuthStore } from '@/zustandStore/login';
 import { useRouter } from 'next/navigation';
 import { createOrder } from '@/apiFasad/apiCalls/buySellCurrancy';
+
 interface ExchangeCalculatorProps {
   defaultTab?: 'buy' | 'sell';
 }
 
-export function ExchangeCalculator({
-  defaultTab = 'buy',
-}: ExchangeCalculatorProps) {
+export function ExchangeCalculator({ defaultTab = 'buy' }: ExchangeCalculatorProps) {
+  const t = useTranslations('HomePage.currencyConverter');
+
   const [activeTab, setActiveTab] = useState<'buy' | 'sell'>(defaultTab);
   const router = useRouter();
   const { user } = useAuthStore();
@@ -54,25 +45,21 @@ export function ExchangeCalculator({
   const [product, setProduct] = useState<'notes' | 'card'>('notes');
   const [open, setOpen] = useState(false);
   const urlOfBackEnd = process.env.NEXT_PUBLIC_BACKEND_URL;
+
   useEffect(() => {
     const run = async () => {
       const target = activeTab === 'buy' ? toCurrency : fromCurrency;
       if (!target || target === 'INR') return;
-
       const liveRate = await getLiveRate(target, activeTab, product);
       if (!liveRate) return;
-
       setRate(liveRate);
-
       const amt = Number(amount) || 0;
-
       if (activeTab === 'buy') {
         setConvertedAmount(+(amt / liveRate).toFixed(2));
       } else {
         setConvertedAmount(+(amt * liveRate).toFixed(2));
       }
     };
-
     run();
   }, [activeTab, toCurrency, fromCurrency, amount, product]);
 
@@ -84,25 +71,21 @@ export function ExchangeCalculator({
   };
 
   const handleBookOrder = async () => {
-    if (user?.role !=='user') {
+    if (user?.role !== 'user') {
       router.push('/login');
       return;
     }
-
     try {
       const payload = {
-        orderType: activeTab, 
-        product, // notes | card
+        orderType: activeTab,
+        product,
         fromCurrency: activeTab === 'buy' ? 'INR' : fromCurrency,
         toCurrency: activeTab === 'buy' ? toCurrency : 'INR',
         inputAmount: Number(amount),
         convertedAmount,
         rate,
       };
-
-      const res = await createOrder(payload)
-   
-     // ✅ success
+      await createOrder(payload);
       setOpen(true);
     } catch (error) {
       console.error(error);
@@ -116,17 +99,14 @@ export function ExchangeCalculator({
         <DialogContent className="max-w-md text-center">
           <DialogHeader>
             <DialogTitle className="text-green-600 text-xl">
-              Order Booked Successfully 🎉
+              {t('dialog.title')}
             </DialogTitle>
           </DialogHeader>
-
           <p className="text-muted-foreground mt-3">
-            Your order has been booked. We will get back to you soon. <br />
-            Thank you!
+            {t('dialog.message')}
           </p>
-
           <Button onClick={() => setOpen(false)} className="mt-5 w-full">
-            Close
+            {t('dialog.close')}
           </Button>
         </DialogContent>
       </Dialog>
@@ -142,13 +122,13 @@ export function ExchangeCalculator({
               value="buy"
               className="text-base font-semibold data-[state=active]:bg-card data-[state=active]:text-primary rounded-none rounded-tl-lg h-full cursor-pointer"
             >
-              Buy Forex
+              {t('tabs.buyForex')}
             </TabsTrigger>
             <TabsTrigger
               value="sell"
               className="text-base font-semibold data-[state=active]:bg-card data-[state=active]:text-primary rounded-none rounded-tr-lg h-full cursor-pointer"
             >
-              Sell Forex
+              {t('tabs.sellForex')}
             </TabsTrigger>
           </TabsList>
 
@@ -161,7 +141,7 @@ export function ExchangeCalculator({
                 className="flex-1 gap-2"
               >
                 <Banknote className="h-4 w-4" />
-                Currency Notes
+                {t('product.currencyNotes')}
               </Button>
               <Button
                 variant={product === 'card' ? 'default' : 'outline'}
@@ -169,19 +149,17 @@ export function ExchangeCalculator({
                 className="flex-1 gap-2"
               >
                 <CreditCard className="h-4 w-4" />
-                Forex Card
+                {t('product.forexCard')}
               </Button>
             </div>
 
+            {/* Buy Tab */}
             <TabsContent value="buy" className="mt-0 space-y-4">
-              {/* INR Amount */}
               <div className="space-y-2">
-                <Label className="text-muted-foreground">You Pay (INR)</Label>
+                <Label className="text-muted-foreground">{t('buyForex.pay')}</Label>
                 <div className="flex gap-2">
                   <div className="relative flex-1">
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
-                      ₹
-                    </span>
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">₹</span>
                     <Input
                       type="number"
                       value={amount}
@@ -196,7 +174,6 @@ export function ExchangeCalculator({
                 </div>
               </div>
 
-              {/* Rate Display */}
               <div className="flex items-center justify-center py-2">
                 <button
                   onClick={handleSwap}
@@ -205,16 +182,15 @@ export function ExchangeCalculator({
                   <ArrowRightLeft className="h-5 w-5 text-primary" />
                 </button>
                 <div className="ml-3 text-md">
-                  <span className="text-muted-foreground">Rate: </span>
+                  <span className="text-muted-foreground">{t('buyForex.rate')}: </span>
                   <span className="font-semibold text-foreground">
                     1 {toCurrency} = ₹{rate.toFixed(2)}
                   </span>
                 </div>
               </div>
 
-              {/* Foreign Currency Amount */}
               <div className="space-y-2">
-                <Label className="text-muted-foreground">You Get</Label>
+                <Label className="text-muted-foreground">{t('buyForex.youGet')}</Label>
                 <div className="flex gap-2">
                   <div className="relative flex-1">
                     <Input
@@ -225,9 +201,7 @@ export function ExchangeCalculator({
                     />
                   </div>
                   <Select value={toCurrency} onValueChange={setToCurrency}>
-                    <SelectTrigger className="w-32 h-12">
-                      <SelectValue />
-                    </SelectTrigger>
+                    <SelectTrigger className="w-32 h-12"><SelectValue /></SelectTrigger>
                     <SelectContent>
                       {currencies.map((currency) => (
                         <SelectItem key={currency.code} value={currency.code}>
@@ -243,10 +217,10 @@ export function ExchangeCalculator({
               </div>
             </TabsContent>
 
+            {/* Sell Tab */}
             <TabsContent value="sell" className="mt-0 space-y-4">
-              {/* Foreign Currency Amount */}
               <div className="space-y-2">
-                <Label className="text-muted-foreground">You Have</Label>
+                <Label className="text-muted-foreground">{t('sellForex.youHave')}</Label>
                 <div className="flex gap-2">
                   <div className="relative flex-1">
                     <Input
@@ -261,9 +235,7 @@ export function ExchangeCalculator({
                     value={fromCurrency === 'INR' ? 'USD' : fromCurrency}
                     onValueChange={setFromCurrency}
                   >
-                    <SelectTrigger className="w-32 h-12">
-                      <SelectValue />
-                    </SelectTrigger>
+                    <SelectTrigger className="w-32 h-12"><SelectValue /></SelectTrigger>
                     <SelectContent>
                       {currencies.map((currency) => (
                         <SelectItem key={currency.code} value={currency.code}>
@@ -278,7 +250,6 @@ export function ExchangeCalculator({
                 </div>
               </div>
 
-              {/* Rate Display */}
               <div className="flex items-center justify-center py-2">
                 <button
                   onClick={handleSwap}
@@ -287,22 +258,18 @@ export function ExchangeCalculator({
                   <ArrowRightLeft className="h-5 w-5 text-primary" />
                 </button>
                 <div className="ml-3 text-lg">
-                  <span className="text-muted-foreground">Rate: </span>
+                  <span className="text-muted-foreground">{t('sellForex.rate')}: </span>
                   <span className="font-semibold text-foreground">
-                    1 {fromCurrency === 'INR' ? 'USD' : fromCurrency} = ₹
-                    {rate.toFixed(2)}
+                    1 {fromCurrency === 'INR' ? 'USD' : fromCurrency} = ₹{rate.toFixed(2)}
                   </span>
                 </div>
               </div>
 
-              {/* INR Amount */}
               <div className="space-y-2">
-                <Label className="text-muted-foreground">You Get (INR)</Label>
+                <Label className="text-muted-foreground">{t('sellForex.youGet')}</Label>
                 <div className="flex gap-2">
                   <div className="relative flex-1">
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
-                      ₹
-                    </span>
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">₹</span>
                     <Input
                       type="text"
                       value={formatCurrency(convertedAmount)}
@@ -317,21 +284,12 @@ export function ExchangeCalculator({
               </div>
             </TabsContent>
 
-            {/* Savings Info */}
-            {/* <div className="bg-success/10 border border-success/30 rounded-lg p-3 text-center">
-              <p className="text-sm text-success font-medium">
-                Save up to ₹
-                {formatCurrency((Number.parseFloat(amount) || 0) * 0.02)}{' '}
-                compared to banks!
-              </p>
-            </div> */}
-
             {/* CTA Button */}
             <Button
               onClick={handleBookOrder}
               className="w-full h-12 text-lg font-semibold bg-accent transition-all duration-300 shadow-lg hover:shadow-2xl hover:scale-105 group hover:hover:bg-primary gap-2 cursor-pointer text-white"
             >
-              Book This Order
+              {t('bookOrder')}
               <ArrowRight className="h-5 w-5" />
             </Button>
 
@@ -339,12 +297,12 @@ export function ExchangeCalculator({
             <div className="flex items-center justify-center gap-4 text-xs text-muted-foreground pt-2">
               <div className="flex items-center gap-1">
                 <RefreshCw className="h-3 w-3" />
-                <span>Live Rates</span>
+                <span>{t('footer.liveRates')}</span>
               </div>
               <span>•</span>
-              <span>RBI Authorized</span>
+              <span>{t('footer.rbiAuthorized')}</span>
               <span>•</span>
-              <span>Secure Payments</span>
+              <span>{t('footer.securePayments')}</span>
             </div>
           </div>
         </Tabs>

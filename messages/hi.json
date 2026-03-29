@@ -49,22 +49,34 @@
       }
     },
     "currencyConverter": {
+      "tabs": {
+        "buyForex": "फॉरेक्स खरीदें",
+        "sellForex": "फॉरेक्स बेचें"
+      },
+      "product": {
+        "currencyNotes": "करेंसी नोट्स",
+        "forexCard": "फॉरेक्स कार्ड"
+      },
       "buyForex": {
-        "title": "फॉरेक्स खरीदें",
-        "tabs": {
-          "currencyNotes": "करेंसी नोट्स",
-          "forexCard": "फॉरेक्स कार्ड"
-        },
         "pay": "आप भुगतान करें (INR)",
         "rate": "रेट",
-        "youGet": "आपको मिलेगा",
-        "saveMessage": "बैंकों की तुलना में ₹1.84 तक बचत करें!",
-        "bookOrder": "यह ऑर्डर बुक करें",
-        "footer": {
-          "liveRates": "लाइव रेट्स",
-          "rbiAuthorized": "RBI अधिकृत",
-          "securePayments": "सुरक्षित भुगतान"
-        }
+        "youGet": "आपको मिलेगा"
+      },
+      "sellForex": {
+        "youHave": "आपके पास है",
+        "rate": "रेट",
+        "youGet": "आपको मिलेगा (INR)"
+      },
+      "bookOrder": "यह ऑर्डर बुक करें",
+      "dialog": {
+        "title": "ऑर्डर सफलतापूर्वक बुक हो गया 🎉",
+        "message": "आपका ऑर्डर बुक हो गया है। हम जल्द ही आपसे संपर्क करेंगे।\nधन्यवाद!",
+        "close": "बंद करें"
+      },
+      "footer": {
+        "liveRates": "लाइव रेट्स",
+        "rbiAuthorized": "RBI अधिकृत",
+        "securePayments": "सुरक्षित भुगतान"
       }
     }
   },

@@ -27,11 +27,9 @@ export function HeroSection() {
             {/* Title */}
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-tight text-balance">
               <span style={{ color: '#1F3C6D' }}>
-                {t('hero.title').split('Foreign Exchange')[0]}
+                {t('hero.title')}
               </span>{' '}
-              <span className="text-primary">
-                Foreign Exchange
-              </span>
+           
             </h1>
 
             {/* Description */}

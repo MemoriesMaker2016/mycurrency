@@ -48,22 +48,34 @@
             }
         },
         "currencyConverter": {
+            "tabs": {
+                "buyForex": "Buy Forex",
+                "sellForex": "Sell Forex"
+            },
+            "product": {
+                "currencyNotes": "Currency Notes",
+                "forexCard": "Forex Card"
+            },
             "buyForex": {
-                "title": "Buy Forex",
-                "tabs": {
-                    "currencyNotes": "Currency Notes",
-                    "forexCard": "Forex Card"
-                },
                 "pay": "You Pay (INR)",
                 "rate": "Rate",
-                "youGet": "You Get",
-                "saveMessage": "Save up to ₹1.84 compared to banks!",
-                "bookOrder": "Book This Order",
-                "footer": {
-                    "liveRates": "Live Rates",
-                    "rbiAuthorized": "RBI Authorized",
-                    "securePayments": "Secure Payments"
-                }
+                "youGet": "You Get"
+            },
+            "sellForex": {
+                "youHave": "You Have",
+                "rate": "Rate",
+                "youGet": "You Get (INR)"
+            },
+            "bookOrder": "Book This Order",
+            "dialog": {
+                "title": "Order Booked Successfully 🎉",
+                "message": "Your order has been booked. We will get back to you soon.\nThank you!",
+                "close": "Close"
+            },
+            "footer": {
+                "liveRates": "Live Rates",
+                "rbiAuthorized": "RBI Authorized",
+                "securePayments": "Secure Payments"
             }
         }
     },
