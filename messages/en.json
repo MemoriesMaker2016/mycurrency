@@ -133,27 +133,48 @@
             }
         }
     },
+
+    
+  "forexcardsectionHome": {
+    "badge": "SMART WAY TO EXCHANGE & SPEND",
+
+    "title": {
+      "line1": "ZERO FOREX",
+      "line2": "MARKUP CARD"
+    },
+
+    "description": "Exchange and load INR at real market rates. Spend globally, buy or sell foreign currency seamlessly — without hidden charges or inflated rates.",
+
+    "features": [
+      "No joining fees, no annual fees*, no delivery fees",
+      "Buy, sell & load foreign currency at real rates",
+      "Accepted worldwide with secure usage"
+    ],
+
+    "cta": "Get Your Card in 24 Hours",
+
+    "rating": {
+      "score": "4.9/5 Rating",
+      "label": "from Travelers"
+    },
+
+    "avatars": {
+      "first": "A",
+      "second": "R",
+      "third": "S"
+    },
+
+    "imageAlt": "Mycurrency Forex Card"
+  },
+
+
+
+
     "TrustedSection": {
         "testimonials": {
             "title": "Trusted by Thousands",
-            "subtitle": "See what our customers have to say about their experience with ForexHub.",
-            "reviews": [
-                {
-                    "message": "ForexHub has been my go-to for currency exchange. Their rates are consistently better than banks, and the doorstep delivery is super convenient.",
-                    "name": "Priya Sharma",
-                    "role": "Frequent Traveler"
-                },
-                {
-                    "message": "I regularly send money abroad for my import business. ForexHub's money transfer service is fast, reliable, and their customer support is excellent.",
-                    "name": "Rahul Mehta",
-                    "role": "Business Owner"
-                },
-                {
-                    "message": "Sending money to my son studying abroad was so easy with ForexHub. The rates are transparent and the process is completely digital.",
-                    "name": "Anita Desai",
-                    "role": "Student Parent"
-                }
-            ]
+            "subtitle": "See what our customers have to say about their experience with ForexHub."
+           
         }
     },
     "footer": {

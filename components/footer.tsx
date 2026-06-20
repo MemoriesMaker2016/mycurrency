@@ -1,3 +1,5 @@
+'use client';
+
 import {
   Facebook,
   Instagram,
@@ -9,8 +11,15 @@ import {
 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 
 export default function Footer() {
+  const t = useTranslations('footer.footer');
+
+  const services = t.raw('services.items') as string[];
+  const quickLinks = t.raw('quickLinks.items') as string[];
+  const bottomLinks = t.raw('bottom.links') as string[];
+
   return (
     <footer className="bg-primary text-primary-foreground">
       <div className="container mx-auto px-4 py-12">
@@ -27,20 +36,24 @@ export default function Footer() {
                 priority
               />
             </Link>
+
             <p className="text-primary-foreground/80 text-sm leading-relaxed">
-              India&apos;s leading online forex marketplace. Buy & sell foreign
-              currency at the best rates with doorstep delivery.
+              {t('about.description')}
             </p>
+
             <div className="flex items-center gap-4">
               <a href="#" className="hover:text-accent transition-colors">
                 <Facebook className="h-5 w-5" />
               </a>
+
               <a href="#" className="hover:text-accent transition-colors">
                 <Twitter className="h-5 w-5" />
               </a>
+
               <a href="#" className="hover:text-accent transition-colors">
                 <Instagram className="h-5 w-5" />
               </a>
+
               <a href="#" className="hover:text-accent transition-colors">
                 <Linkedin className="h-5 w-5" />
               </a>
@@ -49,46 +62,53 @@ export default function Footer() {
 
           {/* Services */}
           <div>
-            <h3 className="font-semibold text-lg mb-4">Services</h3>
+            <h3 className="font-semibold text-lg mb-4">
+              {t('services.title')}
+            </h3>
+
             <ul className="space-y-2 text-sm text-primary-foreground/80">
               <li>
                 <Link
                   href="/exchange"
                   className="hover:text-primary-foreground transition-colors"
                 >
-                  Buy Foreign Currency
+                  {services[0]}
                 </Link>
               </li>
+
               <li>
                 <Link
                   href="/exchange?type=sell"
                   className="hover:text-primary-foreground transition-colors"
                 >
-                  Sell Foreign Currency
+                  {services[1]}
                 </Link>
               </li>
+
               <li>
                 <Link
                   href="/transfer"
                   className="hover:text-primary-foreground transition-colors"
                 >
-                  Money Transfer
+                  {services[2]}
                 </Link>
               </li>
+
               <li>
                 <Link
                   href="#"
                   className="hover:text-primary-foreground transition-colors"
                 >
-                  Forex Cards
+                  {services[3]}
                 </Link>
               </li>
+
               <li>
                 <Link
                   href="#"
                   className="hover:text-primary-foreground transition-colors"
                 >
-                  Travel Insurance
+                  {services[4]}
                 </Link>
               </li>
             </ul>
@@ -96,46 +116,53 @@ export default function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h3 className="font-semibold text-lg mb-4">Quick Links</h3>
+            <h3 className="font-semibold text-lg mb-4">
+              {t('quickLinks.title')}
+            </h3>
+
             <ul className="space-y-2 text-sm text-primary-foreground/80">
               <li>
                 <Link
                   href="/rates"
                   className="hover:text-primary-foreground transition-colors"
                 >
-                  Live Rates
+                  {quickLinks[0]}
                 </Link>
               </li>
+
               <li>
                 <Link
                   href="#"
                   className="hover:text-primary-foreground transition-colors"
                 >
-                  Rate Alerts
+                  {quickLinks[1]}
                 </Link>
               </li>
+
               <li>
                 <Link
                   href="#"
                   className="hover:text-primary-foreground transition-colors"
                 >
-                  Track Order
+                  {quickLinks[2]}
                 </Link>
               </li>
+
               <li>
                 <Link
                   href="#"
                   className="hover:text-primary-foreground transition-colors"
                 >
-                  FAQs
+                  {quickLinks[3]}
                 </Link>
               </li>
+
               <li>
                 <Link
                   href="#"
                   className="hover:text-primary-foreground transition-colors"
                 >
-                  Blog
+                  {quickLinks[4]}
                 </Link>
               </li>
             </ul>
@@ -143,21 +170,24 @@ export default function Footer() {
 
           {/* Contact */}
           <div>
-            <h3 className="font-semibold text-lg mb-4">Contact Us</h3>
+            <h3 className="font-semibold text-lg mb-4">
+              {t('contact.title')}
+            </h3>
+
             <ul className="space-y-3 text-sm text-primary-foreground/80">
               <li className="flex items-start gap-2">
                 <Phone className="h-4 w-4 mt-0.5 shrink-0" />
-                <span>+91 99912 25544</span>
+                <span>{t('contact.phone')}</span>
               </li>
+
               <li className="flex items-start gap-2">
                 <Mail className="h-4 w-4 mt-0.5 shrink-0" />
-                <span>support@mycurrency.in</span>
+                <span>{t('contact.email')}</span>
               </li>
+
               <li className="flex items-start gap-2">
                 <MapPin className="h-4 w-4 mt-0.5 shrink-0" />
-                <span>
-                  E-187, Jindal Global City, Sector 35, Sonipat, Haryana 131001
-                </span>
+                <span>{t('contact.address')}</span>
               </li>
             </ul>
           </div>
@@ -166,27 +196,28 @@ export default function Footer() {
         {/* Bottom Bar */}
         <div className="mt-12 pt-6 border-t border-primary-foreground/20">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-primary-foreground/70">
-            <p>
-              © 2026 mycurrency. All rights reserved. RBI Authorized Dealer.
-            </p>
+            <p>{t('bottom.copyright')}</p>
+
             <div className="flex items-center gap-4">
               <Link
                 href="#"
                 className="hover:text-primary-foreground transition-colors"
               >
-                Privacy Policy
+                {bottomLinks[0]}
               </Link>
+
               <Link
                 href="#"
                 className="hover:text-primary-foreground transition-colors"
               >
-                Terms of Service
+                {bottomLinks[1]}
               </Link>
+
               <Link
                 href="#"
                 className="hover:text-primary-foreground transition-colors"
               >
-                Refund Policy
+                {bottomLinks[2]}
               </Link>
             </div>
           </div>

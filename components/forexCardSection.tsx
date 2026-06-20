@@ -1,10 +1,14 @@
+
 'use client';
 
 import Image from 'next/image';
-import { CheckCircle, Globe, Plane } from 'lucide-react';
+import { CheckCircle, Globe } from 'lucide-react';
 import { useState, useRef } from 'react';
+import { useTranslations } from 'next-intl';
 
 export function ForexCardSection() {
+  const t = useTranslations('forexcardsectionHome');
+
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -25,11 +29,7 @@ export function ForexCardSection() {
     setMousePosition({ x: 0, y: 0 });
   };
 
-  const features = [
-    'No joining fees, no annual fees*, no delivery fees',
-    'Buy, sell & load foreign currency at real rates',
-    'Accepted worldwide with secure usage',
-  ];
+  const features = t.raw('features') as string[];
 
   return (
     <section
@@ -39,12 +39,10 @@ export function ForexCardSection() {
       className="relative min-h-screen bg-gradient-to-b from-blue-100 via-blue-50 to-green-50 overflow-hidden py-20 px-4 sm:px-6 lg:px-8"
     >
       {/* Decorative elements */}
-      {/* <div className="absolute top-20 right-32 text-6xl opacity-30 animate-bounce">
-        <Plane className="w-16 h-16 text-blue-400" />
-      </div> */}
       <div className="absolute bottom-32 left-20 text-6xl opacity-20">
         <Globe className="w-12 h-12 text-green-400" />
       </div>
+
       <div className="absolute top-40 right-20 w-8 h-8 rounded-full bg-green-400 opacity-40"></div>
 
       <div className="max-w-350 mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -54,22 +52,24 @@ export function ForexCardSection() {
           <div className="inline-flex items-center gap-2 mb-6 bg-white rounded-full px-4 py-2 shadow-sm">
             <div className="w-2 h-2 bg-green-500 rounded-full"></div>
             <span className="text-xs font-bold tracking-widest text-gray-800">
-              SMART WAY TO EXCHANGE & SPEND
+              {t('badge')}
             </span>
           </div>
 
           {/* Heading */}
           <h1 className="text-5xl sm:text-6xl font-bold mb-6 leading-tight">
-            <span style={{ color: '#1F3C6D' }}>ZERO FOREX</span>
+            <span style={{ color: '#1F3C6D' }}>
+              {t('title.line1')}
+            </span>
             <br />
-            <span style={{ color: '#1F3C6D' }}>MARKUP CARD</span>
+            <span style={{ color: '#1F3C6D' }}>
+              {t('title.line2')}
+            </span>
           </h1>
 
           {/* Description */}
           <p className="text-gray-600 text-lg mb-8 leading-relaxed">
-            Exchange and load INR at real market rates. Spend globally, buy or
-            sell foreign currency seamlessly — without hidden charges or
-            inflated rates.
+            {t('description')}
           </p>
 
           {/* Features */}
@@ -82,6 +82,7 @@ export function ForexCardSection() {
                 <div className="mt-1 flex-shrink-0">
                   <CheckCircle className="w-5 h-5 text-green-500" />
                 </div>
+
                 <p className="text-gray-800 font-medium group-hover:text-gray-900 transition-colors duration-300">
                   {feature}
                 </p>
@@ -92,7 +93,7 @@ export function ForexCardSection() {
           {/* CTA and Rating */}
           <div className="flex items-center gap-6 flex-wrap">
             <button className="inline-flex items-center gap-2 bg-accent hover:bg-primary text-white font-bold py-3 px-8 rounded-full transition-all duration-300 shadow-lg hover:shadow-2xl hover:scale-105 group cursor-pointer">
-              Get Your Card in 24 Hours
+              {t('cta')}
               <span className="text-lg transition-transform group-hover:translate-x-1">
                 →
               </span>
@@ -101,18 +102,26 @@ export function ForexCardSection() {
             <div className="flex items-center gap-3">
               <div className="flex -space-x-2">
                 <div className="w-10 h-10 rounded-full bg-linear-to-br from-blue-400 to-blue-600 border-2 border-white flex items-center justify-center text-white font-bold text-sm">
-                  A
+                  {t('avatars.first')}
                 </div>
+
                 <div className="w-10 h-10 rounded-full bg-linear-to-br from-purple-400 to-purple-600 border-2 border-white flex items-center justify-center text-white font-bold text-sm">
-                  R
+                  {t('avatars.second')}
                 </div>
+
                 <div className="w-10 h-10 rounded-full bg-linear-to-br from-pink-400 to-pink-600 border-2 border-white flex items-center justify-center text-white font-bold text-sm">
-                  S
+                  {t('avatars.third')}
                 </div>
               </div>
+
               <div>
-                <div className="font-bold text-gray-900">4.9/5 Rating</div>
-                <div className="text-sm text-gray-600">from Travelers</div>
+                <div className="font-bold text-gray-900">
+                  {t('rating.score')}
+                </div>
+
+                <div className="text-sm text-gray-600">
+                  {t('rating.label')}
+                </div>
               </div>
             </div>
           </div>
@@ -121,7 +130,6 @@ export function ForexCardSection() {
         {/* Right Image */}
         <div className="relative flex items-center justify-center py-12">
           <div className="relative w-full max-w-sm">
-            {/* Card Image */}
             <div
               className="relative w-full rounded-3xl overflow-hidden shadow-2xl transition-transform duration-700 ease-out"
               style={{
@@ -130,7 +138,7 @@ export function ForexCardSection() {
             >
               <Image
                 src="/mycurrencyForexCard.jpeg"
-                alt="Mycurrency Forex Card"
+                alt={t('imageAlt')}
                 width={400}
                 height={600}
                 className="w-full h-auto"
@@ -138,7 +146,6 @@ export function ForexCardSection() {
               />
             </div>
 
-            {/* Decorative circles */}
             <div className="absolute -top-8 -right-8 w-24 h-24 bg-blue-300 rounded-full opacity-20 blur-2xl"></div>
             <div className="absolute -bottom-8 -left-8 w-32 h-32 bg-green-300 rounded-full opacity-20 blur-2xl"></div>
           </div>

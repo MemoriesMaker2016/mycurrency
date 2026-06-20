@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 
 type CardData = {
@@ -7,6 +8,7 @@ type CardData = {
   name: string;
   handle: string;
 };
+
 
 const cardsData: CardData[] = [
   {
@@ -70,17 +72,17 @@ function Card({ card }: { card: CardData }) {
 
 export default function TestimonialSection() {
   const marqueeData = [...cardsData, ...cardsData];
+    const t = useTranslations('TrustedSection.testimonials');
 
   return (
     <section className="py-20 bg-white">
       {/* 🔥 Heading */}
       <div className="text-center max-w-2xl mx-auto mb-12">
         <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
-          Trusted by Thousands
+          {t('title')}
         </h2>
         <p className="mt-3 text-gray-600 text-base md:text-lg">
-          See what our customers have to say about their experience with
-          ForexHub.
+       {t('subtitle')}
         </p>
       </div>
 
