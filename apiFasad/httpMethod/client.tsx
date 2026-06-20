@@ -1,5 +1,6 @@
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL!;
 
+
 type FetchOptions = RequestInit & {
   params?: Record<string, string>;
 };

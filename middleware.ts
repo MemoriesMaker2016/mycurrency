@@ -13,7 +13,7 @@ export function middleware(request: NextRequest) {
 
   // ── not logged in ──────────────────────────────
   if (!token) {
-    if (pathname.startsWith('/profile') || pathname.startsWith('/admin')) {
+    if (pathname.startsWith('/user-profile') || pathname.startsWith('/admin')) {
       return NextResponse.redirect(new URL('/login', request.url))
     }
     return NextResponse.next()
@@ -39,18 +39,18 @@ export function middleware(request: NextRequest) {
 
   // ── already logged in trying to go to /login ───
   if (pathname === '/login') {
-    if (role === 'user')     return NextResponse.redirect(new URL('/profile', request.url))
+    if (role === 'user')     return NextResponse.redirect(new URL('/user-profile', request.url))
     if (role === 'subadmin') return NextResponse.redirect(new URL('/admin/orders', request.url))
     return NextResponse.redirect(new URL('/admin', request.url))
   }
 
   // ── block non-admin from /admin ────────────────
   if (pathname.startsWith('/admin') && role === 'user') {
-    return NextResponse.redirect(new URL('/profile', request.url))
+    return NextResponse.redirect(new URL('/user-profile', request.url))
   }
 
-  // ── block non-user from /profile ───────────────
-  if (pathname.startsWith('/profile') && role !== 'user') {
+  // ── block non-user from /user-profile ───────────────
+  if (pathname.startsWith('/user-profile') && role !== 'user') {
     return NextResponse.redirect(new URL('/admin', request.url))
   }
 
@@ -80,5 +80,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/profile/:path*', '/admin/:path*', '/login', '/notifications']
+  matcher: ['/user-profile/:path*', '/admin/:path*', '/login', '/notifications']
 }

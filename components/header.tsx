@@ -58,7 +58,7 @@ export default function Header() {
     router.push("/login");
   };
 
-  const profileRoute = user?.role === "admin" ? "/admin" : "/profile";
+  const profileRoute = user?.role === "admin" ? "/admin" : "/user-profile";
 
   return (
     <header className="sticky top-0 z-50 w-full bg-card border-b border-border shadow-lg">
