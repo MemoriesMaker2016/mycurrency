@@ -16,6 +16,7 @@ export function useNotifications() {
   const [loading, setLoading] = useState(true);
   const restart = useNotificationCount((s)=>s.reset)
   const count = useNotificationCount((s)=>s.count)
+  
 
   const fetchNotifications = useCallback(async () => {
     setLoading(true);

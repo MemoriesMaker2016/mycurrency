@@ -11,6 +11,10 @@ interface NotificationCountStore {
 export const useNotificationCount = create<NotificationCountStore>((set) => ({
   count: 0,
   setCount: (count) => set({ count }),
-  increment: () => set((state) => ({ count: state.count + 1 })),
+ increment: () =>
+  set((state) => {
+    console.log("Increment called");
+    return { count: state.count + 1 };
+  }),
   reset: () => set({ count: 0 }),
 }));

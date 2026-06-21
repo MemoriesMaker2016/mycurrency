@@ -43,7 +43,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     // listen for status changes on their orders
     socket.on('orderStatusNotification', () => {
-      console.log("yes");
+      console.log("new notifatcion");
 
       increment(); // bump user notification badge
       toast("📦 New Order Placed!", {
