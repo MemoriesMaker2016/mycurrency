@@ -69,30 +69,57 @@ export default function DocumentsCheckoutContent() {
     return Object.keys(next).length === 0;
   }
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    if (!orderId || !validate()) return;
+  console.log("enter");
+  
+ async function handleSubmit(e: React.FormEvent) {
+  e.preventDefault();
+  console.log("ernder");
+  
 
-    setSubmitting(true);
-    setSubmitError("");
-    try {
-      const formData = new FormData();
-      formData.append("panNumber", panNumber.toUpperCase());
-      formData.append("aadharNumber", aadharNumber);
-      formData.append("panCard", panFile as File);
-      formData.append("aadharFront", aadharFront as File);
-      formData.append("aadharBack", aadharBack as File);
-      formData.append("selfie", selfie as File);
+  // if (!orderId || !validate()) return;
 
-      await submitOrderDocuments(orderId, formData);
-      setSubmitted(true);
-    } catch (err) {
-      console.error(err);
-      setSubmitError("Something went wrong while submitting your documents. Please try again.");
-    } finally {
-      setSubmitting(false);
+  setSubmitting(true);
+  setSubmitError("");
+
+  try {
+    const formData = new FormData();
+
+    formData.append("panNumber", panNumber.toUpperCase());
+    formData.append("aadharNumber", aadharNumber);
+
+    if (panFile) formData.append("panCard", panFile);
+    if (aadharFront) formData.append("aadharFront", aadharFront);
+    if (aadharBack) formData.append("aadharBack", aadharBack);
+    if (selfie) formData.append("selfie", selfie);
+
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/auth/${1}`,
+      {
+        method: "POST",
+        body: formData,
+        credentials: "include", // if using cookies (optional)
+        // headers: {
+        //   Authorization: `Bearer ${token}`, // if using JWT
+        // },
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || "Upload failed");
     }
+
+    setSubmitted(true);
+  } catch (err: any) {
+    console.error(err);
+    setSubmitError(
+      err.message || "Something went wrong while submitting your documents."
+    );
+  } finally {
+    setSubmitting(false);
   }
+}
 
   if (loadingOrder) {
     return (
