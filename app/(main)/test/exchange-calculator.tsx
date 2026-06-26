@@ -1,0 +1,306 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+import { useTranslations } from 'next-intl';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { getLiveRate } from '@/lib/liveRates';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { currencies, formatCurrency, getCurrencyByCode } from '@/lib/currencies';
+import { ArrowRightLeft, RefreshCw, Banknote, CreditCard, ArrowRight } from 'lucide-react';
+import { useAuthStore } from '@/zustandStore/login';
+import { useRouter } from 'next/navigation';
+import { createOrder } from '@/apiFasad/apiCalls/buySellCurrancy';
+
+interface ExchangeCalculatorProps {
+  defaultTab?: 'buy' | 'sell';
+}
+
+export function ExchangeCalculator({ defaultTab = 'buy' }: ExchangeCalculatorProps) {
+  const t = useTranslations('HomePage.currencyConverter');
+
+  const [activeTab, setActiveTab] = useState<'buy' | 'sell'>(defaultTab);
+  const router = useRouter();
+  const { user } = useAuthStore();
+  const [fromCurrency, setFromCurrency] = useState('INR');
+  const [toCurrency, setToCurrency] = useState('USD');
+  const [amount, setAmount] = useState<string>('10000');
+  const [convertedAmount, setConvertedAmount] = useState<number>(0);
+  const [rate, setRate] = useState<number>(0);
+  const [product, setProduct] = useState<'notes' | 'card'>('notes');
+  const [bookingOrder, setBookingOrder] = useState(false);
+  const urlOfBackEnd = process.env.NEXT_PUBLIC_BACKEND_URL;
+
+  useEffect(() => {
+    const run = async () => {
+      const target = activeTab === 'buy' ? toCurrency : fromCurrency;
+      if (!target || target === 'INR') return;
+      const liveRate = await getLiveRate(target, activeTab, product);
+      if (!liveRate) return;
+      setRate(liveRate);
+      const amt = Number(amount) || 0;
+      if (activeTab === 'buy') {
+        setConvertedAmount(+(amt / liveRate).toFixed(2));
+      } else {
+        setConvertedAmount(+(amt * liveRate).toFixed(2));
+      }
+    };
+    run();
+  }, [activeTab, toCurrency, fromCurrency, amount, product]);
+
+  const handleSwap = () => {
+    setActiveTab(activeTab === 'buy' ? 'sell' : 'buy');
+    const temp = fromCurrency;
+    setFromCurrency(toCurrency);
+    setToCurrency(temp);
+  };
+
+  const handleBookOrder = async () => {
+    if (user?.role !== 'user') {
+      router.push('/login');
+      return;
+    }
+    setBookingOrder(true);
+    try {
+      const payload = {
+        orderType: activeTab,
+        product,
+        fromCurrency: activeTab === 'buy' ? 'INR' : fromCurrency,
+        toCurrency: activeTab === 'buy' ? toCurrency : 'INR',
+        inputAmount: Number(amount),
+        convertedAmount,
+        rate,
+      };
+      const order = await createOrder(payload);
+
+      // Adjust this if your backend returns the new order under a different
+      // key — e.g. order.id, or order.order._id instead of order._id.
+      const newOrderId = order?._id ?? order?.id ?? order?.order?._id;
+
+      if (!newOrderId) {
+        console.error('createOrder response did not include an order id:', order);
+        alert('Order created, but we could not start the verification step. Please contact support.');
+        return;
+      }
+
+      // Next step: collect PAN, Aadhar, and a selfie before the order is confirmed.
+      router.push(`/checkout/documents?orderId=${newOrderId}`);
+    } catch (error) {
+      console.error(error);
+      alert('Something went wrong while booking order');
+    } finally {
+      setBookingOrder(false);
+    }
+  };
+
+  return (
+    <Card className="w-full shadow-xl border-0 bg-card">
+      <CardContent className="p-0">
+        <Tabs
+          value={activeTab}
+          onValueChange={(v) => setActiveTab(v as 'buy')}
+          className="w-full"
+        >
+          <TabsList className="w-full grid grid-cols-2 rounded-none rounded-t-lg h-14 bg-secondary">
+            <TabsTrigger
+              value="buy"
+              className="text-base font-semibold data-[state=active]:bg-card data-[state=active]:text-primary rounded-none rounded-tl-lg h-full cursor-pointer"
+            >
+              {t('tabs.buyForex')}
+            </TabsTrigger>
+            <TabsTrigger
+              value="sell"
+              className="text-base font-semibold data-[state=active]:bg-card data-[state=active]:text-primary rounded-none rounded-tr-lg h-full cursor-pointer"
+            >
+              {t('tabs.sellForex')}
+            </TabsTrigger>
+          </TabsList>
+
+          <div className="p-6 space-y-6">
+            {/* Product Selection */}
+            <div className="flex gap-2">
+              <Button
+                variant={product === 'notes' ? 'default' : 'outline'}
+                onClick={() => setProduct('notes')}
+                className="flex-1 gap-2"
+              >
+                <Banknote className="h-4 w-4" />
+                {t('product.currencyNotes')}
+              </Button>
+              <Button
+                variant={product === 'card' ? 'default' : 'outline'}
+                onClick={() => setProduct('card')}
+                className="flex-1 gap-2"
+              >
+                <CreditCard className="h-4 w-4" />
+                {t('product.forexCard')}
+              </Button>
+            </div>
+
+            {/* Buy Tab */}
+            <TabsContent value="buy" className="mt-0 space-y-4">
+              <div className="space-y-2">
+                <Label className="text-muted-foreground">{t('buyForex.pay')}</Label>
+                <div className="flex gap-2">
+                  <div className="relative flex-1">
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">₹</span>
+                    <Input
+                      type="number"
+                      value={amount}
+                      onChange={(e) => setAmount(e.target.value)}
+                      className="pl-8 h-12 text-lg font-semibold"
+                      placeholder="Enter amount"
+                    />
+                  </div>
+                  <div className="w-24 h-12 flex items-center justify-center bg-secondary rounded-lg font-medium">
+                    INR
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-center py-2">
+                <button
+                  onClick={handleSwap}
+                  className="p-2 rounded-full bg-secondary hover:bg-secondary/80 transition-colors"
+                >
+                  <ArrowRightLeft className="h-5 w-5 text-primary" />
+                </button>
+                <div className="ml-3 text-md">
+                  <span className="text-muted-foreground">{t('buyForex.rate')}: </span>
+                  <span className="font-semibold text-foreground">
+                    1 {toCurrency} = ₹{rate.toFixed(2)}
+                  </span>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label className="text-muted-foreground">{t('buyForex.youGet')}</Label>
+                <div className="flex gap-2">
+                  <div className="relative flex-1">
+                    <Input
+                      type="text"
+                      value={formatCurrency(convertedAmount)}
+                      readOnly
+                      className="h-12 text-lg font-semibold bg-secondary/50"
+                    />
+                  </div>
+                  <Select value={toCurrency} onValueChange={setToCurrency}>
+                    <SelectTrigger className="w-32 h-12"><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                      {currencies.map((currency) => (
+                        <SelectItem key={currency.code} value={currency.code}>
+                          <span className="flex items-center gap-2">
+                            <span>{currency.country}</span>
+                            <span>{currency.code}</span>
+                          </span>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+            </TabsContent>
+
+            {/* Sell Tab */}
+            <TabsContent value="sell" className="mt-0 space-y-4">
+              <div className="space-y-2">
+                <Label className="text-muted-foreground">{t('sellForex.youHave')}</Label>
+                <div className="flex gap-2">
+                  <div className="relative flex-1">
+                    <Input
+                      type="number"
+                      value={amount}
+                      onChange={(e) => setAmount(e.target.value)}
+                      className="h-12 text-lg font-semibold"
+                      placeholder="Enter amount"
+                    />
+                  </div>
+                  <Select
+                    value={fromCurrency === 'INR' ? 'USD' : fromCurrency}
+                    onValueChange={setFromCurrency}
+                  >
+                    <SelectTrigger className="w-32 h-12"><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                      {currencies.map((currency) => (
+                        <SelectItem key={currency.code} value={currency.code}>
+                          <span className="flex items-center gap-2">
+                            <span>{currency.country}</span>
+                            <span>{currency.code}</span>
+                          </span>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-center py-2">
+                <button
+                  onClick={handleSwap}
+                  className="p-2 rounded-full bg-secondary hover:bg-secondary/80 transition-colors"
+                >
+                  <ArrowRightLeft className="h-5 w-5 text-primary" />
+                </button>
+                <div className="ml-3 text-lg">
+                  <span className="text-muted-foreground">{t('sellForex.rate')}: </span>
+                  <span className="font-semibold text-foreground">
+                    1 {fromCurrency === 'INR' ? 'USD' : fromCurrency} = ₹{rate.toFixed(2)}
+                  </span>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label className="text-muted-foreground">{t('sellForex.youGet')}</Label>
+                <div className="flex gap-2">
+                  <div className="relative flex-1">
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">₹</span>
+                    <Input
+                      type="text"
+                      value={formatCurrency(convertedAmount)}
+                      readOnly
+                      className="pl-8 h-12 text-lg font-semibold bg-secondary/50"
+                    />
+                  </div>
+                  <div className="w-24 h-12 flex items-center justify-center bg-secondary rounded-lg font-medium">
+                    INR
+                  </div>
+                </div>
+              </div>
+            </TabsContent>
+
+            {/* CTA Button */}
+            <Button
+              onClick={handleBookOrder}
+              disabled={bookingOrder}
+              className="w-full h-12 text-lg font-semibold bg-accent transition-all duration-300 shadow-lg hover:shadow-2xl hover:scale-105 group hover:hover:bg-primary gap-2 cursor-pointer text-white"
+            >
+              {bookingOrder ? 'Booking...' : t('bookOrder')}
+              <ArrowRight className="h-5 w-5" />
+            </Button>
+
+            {/* Trust Badges */}
+            <div className="flex items-center justify-center gap-4 text-xs text-muted-foreground pt-2">
+              <div className="flex items-center gap-1">
+                <RefreshCw className="h-3 w-3" />
+                <span>{t('footer.liveRates')}</span>
+              </div>
+              <span>•</span>
+              <span>{t('footer.rbiAuthorized')}</span>
+              <span>•</span>
+              <span>{t('footer.securePayments')}</span>
+            </div>
+          </div>
+        </Tabs>
+      </CardContent>
+    </Card>
+  );
+}

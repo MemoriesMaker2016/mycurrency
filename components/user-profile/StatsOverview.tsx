@@ -8,47 +8,32 @@ import {
 import { Order } from "./types";
 
 export default function StatsOverview({
-  orders,
+  totalOrder,
+  summary
 }: {
-  orders: Order[];
+  totalOrder:number,
+  summary:any[]
 }) {
-  const completed = orders.filter(
-    (o) => o.status === "completed"
-  ).length;
-
-  const pending = orders.filter(
-    (o) => o.status === "pending"
-  ).length;
-
-  const totalInrVolume = orders
-    .filter((o) => o.fromCurrency === "INR")
-    .reduce(
-      (sum, o) =>
-        sum + (o.inputAmount || 0),
-      0
-    );
 
   const stats = [
     {
       label: "Total orders",
-      value: orders.length,
+      value:totalOrder,
       icon: Wallet,
     },
     {
       label: "Completed",
-      value: completed,
+      value: summary?.confirmedCount,
       icon: CheckCircle2,
     },
     {
       label: "Pending",
-      value: pending,
+      value:summary?.pendingCount,
       icon: Clock3,
     },
     {
       label: "INR volume converted",
-      value: `₹${totalInrVolume.toLocaleString(
-        "en-IN"
-      )}`,
+      value: `₹${summary?.totalamountAll}`,
       icon: ArrowRightLeft,
     },
   ];

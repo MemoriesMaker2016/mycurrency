@@ -29,6 +29,8 @@ type SortOrder = "latest" | "oldest";
 export default function OrderHistory() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(false);
+  const [totalOrders , setTotalOrders] = useState(0);
+  const [summaryData , setsummaryData] = useState([]);
 
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -71,6 +73,8 @@ export default function OrderHistory() {
 
       setOrders(res?.data || []);
       setTotalPages(res?.totalPages || 1);
+      setTotalOrders(res?.totalOrders || 0)
+      setsummaryData(res?.summary ||[])
     } catch (error) {
       console.error(error);
     } finally {
@@ -80,6 +84,7 @@ export default function OrderHistory() {
 
   useEffect(() => {
     fetchOrders();
+    
   }, [page, status, type, sort]);
 
   const clearFilters = () => {
@@ -100,7 +105,7 @@ export default function OrderHistory() {
 
   return (
     <>
-     <StatsOverview orders={orders} />
+     <StatsOverview totalOrder={totalOrders} summary={summaryData} />
   
     <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">

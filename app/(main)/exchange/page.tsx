@@ -85,6 +85,7 @@ export default function ExchangePage() {
 
               {/* Calculator */}
               <div>
+          
                 <ExchangeCalculator />
               </div>
             </div>
